@@ -1,0 +1,59 @@
+version: "3.8"
+
+networks:
+  ordino:
+
+volumes:
+  mysql-db:
+
+services:
+  app:
+    container_name: ordino_app
+    platform: "linux/amd64"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - 9000:9000
+    networks:
+      - ordino
+
+  phpmyadmin:
+    container_name: ordino_phpmyadmin
+    image: phpmyadmin:latest
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    ports:
+      - 8080:80
+    networks:
+      - ordino
+
+  db:
+    container_name: ordino_db
+    image: mysql:9.7
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysql-db:/var/lib/mysql
+    networks:
+      - ordino
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
