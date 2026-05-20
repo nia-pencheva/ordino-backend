@@ -1,0 +1,43 @@
+package com.ordino.domain.suppliers;
+
+import com.ordino.domain.warehouse.products.WarehouseProduct;
+import jakarta.persistence.*;
+import lombok.*;
+import java.math.BigDecimal;
+import java.time.Instant;
+
+@Entity
+@Table(name = "suppliers_products")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString(exclude = {"supplier", "warehouseProduct"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class SupplierProduct {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
+    @Column(columnDefinition = "INT UNSIGNED")
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "supplier_id", nullable = false)
+    private Supplier supplier;
+
+    @ManyToOne
+    @JoinColumn(name = "warehouse_product_id", nullable = false)
+    private WarehouseProduct warehouseProduct;
+
+    @Column(nullable = false, columnDefinition = "DECIMAL(10, 2) UNSIGNED")
+    private BigDecimal price;
+
+    @Column(name = "min_order_quantity", nullable = false, columnDefinition = "DECIMAL(10, 3) UNSIGNED")
+    private BigDecimal minOrderQuantity;
+
+    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
+    private Instant createdAt;
+
+    @Column(name = "updated_at", nullable = true, columnDefinition = "TIMESTAMP")
+    private Instant updatedAt;
+}
