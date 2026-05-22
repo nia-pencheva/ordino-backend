@@ -19,7 +19,7 @@ services:
     env_file:
       - .env
     ports:
-      - 9000:9000
+      - 8080:8080
     networks:
       - ordino
 
@@ -33,7 +33,7 @@ services:
       PMA_HOST: db
       PMA_PORT: 3306
     ports:
-      - 8080:80
+      - 8081:80
     networks:
       - ordino
 
