@@ -8,7 +8,7 @@ CREATE TABLE recipes (
     description      TEXT              NULL,
     recipe_status_id INT UNSIGNED      NOT NULL,
     created_by       INT UNSIGNED      NOT NULL,
-    created_at       TIMESTAMP         NOT NULL,
+    created_at       TIMESTAMP         NOT NULL DEFAULT CURRENT_TIMESTAMP,
     active           BOOLEAN           NULL DEFAULT TRUE,
     PRIMARY KEY (id),
     UNIQUE KEY uq_recipes_title_active (title, active),

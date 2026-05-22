@@ -2,7 +2,7 @@ CREATE TABLE recipe_ingredient_categories (
     id                 INT UNSIGNED  NOT NULL AUTO_INCREMENT,
     category           VARCHAR(100)  NOT NULL,
     parent_category_id INT UNSIGNED  NULL,
-    created_at         TIMESTAMP     NOT NULL,
+    created_at         TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at         TIMESTAMP     NULL DEFAULT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_recipe_ingredient_categories (category, parent_category_id),

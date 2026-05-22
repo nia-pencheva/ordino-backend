@@ -1,7 +1,7 @@
 CREATE TABLE menus (
     id         INT UNSIGNED  NOT NULL AUTO_INCREMENT,
     title      VARCHAR(250)  NOT NULL,
-    created_at TIMESTAMP     NOT NULL,
+    created_at TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP     NULL DEFAULT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_menus_title (title)

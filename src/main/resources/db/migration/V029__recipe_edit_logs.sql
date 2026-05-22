@@ -4,7 +4,7 @@ CREATE TABLE recipe_edit_logs (
     recipe_id  INT UNSIGNED    NOT NULL,
     old_data   JSON            NULL,
     new_data   JSON            NULL,
-    created_at TIMESTAMP       NOT NULL,
+    created_at TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     INDEX idx_recipe_edit_logs_recipe_created (recipe_id, created_at),
     CONSTRAINT fk_rel_user_id FOREIGN KEY (user_id) REFERENCES users (id),

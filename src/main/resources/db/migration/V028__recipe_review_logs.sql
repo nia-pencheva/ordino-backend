@@ -5,7 +5,7 @@ CREATE TABLE recipe_review_logs (
     snapshot               JSON            NOT NULL,
     return_notes           TEXT            NULL,
     recipe_review_event_id INT UNSIGNED    NOT NULL,
-    created_at             TIMESTAMP       NOT NULL,
+    created_at             TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     INDEX idx_recipe_review_logs_recipe_created (recipe_id, created_at),
     CONSTRAINT fk_rrl_recipe_id FOREIGN KEY (recipe_id) REFERENCES recipes (id),

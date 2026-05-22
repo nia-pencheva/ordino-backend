@@ -6,11 +6,11 @@ CREATE TABLE roles (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO roles (role) VALUES
-    ('ADMIN'),
-    ('LINE_COOK'),
-    ('CHEF'),
-    ('KITCHEN_STAFF'),
-    ('WAREHOUSE_MANAGER'),
-    ('MANAGER');
+    ('admin'),
+    ('line cook'),
+    ('chef'),
+    ('kitchen staff'),
+    ('warehouse manager'),
+    ('manager');
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON ${dbName}.roles TO '${appUser}'@'%';
