@@ -19,9 +19,15 @@ services:
     env_file:
       - .env
     ports:
-      - 9000:9000
+      - 8080:8080
     networks:
       - ordino
+    develop:
+      watch:
+        - action: rebuild
+          path: ./src
+        - action: rebuild
+          path: ./pom.xml
 
   phpmyadmin:
     container_name: ordino_phpmyadmin
@@ -33,7 +39,7 @@ services:
       PMA_HOST: db
       PMA_PORT: 3306
     ports:
-      - 8080:80
+      - 8081:80
     networks:
       - ordino
 
@@ -42,6 +48,7 @@ services:
     image: mysql:9.7
     ports:
       - 3306:3306
+    command: --default-time-zone=+00:00
     environment:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
