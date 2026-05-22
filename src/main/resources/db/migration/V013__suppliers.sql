@@ -5,7 +5,7 @@ CREATE TABLE suppliers (
     email        VARCHAR(254)  NOT NULL,
     phone_number VARCHAR(30)   NOT NULL,
     active       BOOLEAN       NOT NULL DEFAULT TRUE,
-    created_at   TIMESTAMP     NOT NULL,
+    created_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at   TIMESTAMP     NULL DEFAULT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_suppliers_name (name),

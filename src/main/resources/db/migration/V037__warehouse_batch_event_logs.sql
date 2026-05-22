@@ -6,7 +6,7 @@ CREATE TABLE warehouse_batch_event_logs (
     quantity_delta           DECIMAL(10, 3)  NOT NULL,
     loss_reason_id           INT UNSIGNED    NULL,
     notes                    TEXT            NULL DEFAULT NULL,
-    created_at               TIMESTAMP       NOT NULL,
+    created_at               TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     CONSTRAINT fk_wbel_user_id FOREIGN KEY (user_id) REFERENCES users (id),
     CONSTRAINT fk_wbel_warehouse_batch_id FOREIGN KEY (warehouse_batch_id) REFERENCES warehouse_batches (id),

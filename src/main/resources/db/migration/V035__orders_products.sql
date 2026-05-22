@@ -5,7 +5,7 @@ CREATE TABLE orders_products (
     price                DECIMAL(10, 2) UNSIGNED NOT NULL,
     expected_quantity    DECIMAL(10, 3) UNSIGNED NOT NULL,
     received_quantity    DECIMAL(10, 3) UNSIGNED NULL,
-    created_at           TIMESTAMP       NOT NULL,
+    created_at           TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at           TIMESTAMP       NULL DEFAULT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_orders_products (order_id, warehouse_product_id),

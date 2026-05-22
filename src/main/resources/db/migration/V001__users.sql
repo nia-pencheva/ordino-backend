@@ -6,7 +6,7 @@ CREATE TABLE users (
     password_changed_at TIMESTAMP     NULL DEFAULT NULL,
     username            VARCHAR(50)   NOT NULL,
     full_name           VARCHAR(100)  NOT NULL,
-    created_at          TIMESTAMP     NOT NULL,
+    created_at          TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at          TIMESTAMP     NULL DEFAULT NULL,
     deleted_at          TIMESTAMP     NULL DEFAULT NULL,
     PRIMARY KEY (id),

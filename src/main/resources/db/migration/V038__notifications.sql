@@ -5,7 +5,7 @@ CREATE TABLE notifications (
     notification_type_id INT UNSIGNED    NOT NULL,
     user_id              INT UNSIGNED    NOT NULL,
     read_at              TIMESTAMP       NULL DEFAULT NULL,
-    created_at           TIMESTAMP       NOT NULL,
+    created_at           TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     INDEX idx_notifications_user_read_created (user_id, read_at, created_at),
     CONSTRAINT fk_notifications_notification_type_id FOREIGN KEY (notification_type_id) REFERENCES notification_types (id),

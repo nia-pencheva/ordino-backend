@@ -4,7 +4,7 @@ CREATE TABLE suppliers_products (
     warehouse_product_id INT UNSIGNED   NOT NULL,
     price                DECIMAL(10, 2) UNSIGNED NOT NULL,
     min_order_quantity   DECIMAL(10, 3) UNSIGNED NOT NULL,
-    created_at           TIMESTAMP      NOT NULL,
+    created_at           TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at           TIMESTAMP      NULL DEFAULT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_suppliers_products (supplier_id, warehouse_product_id),

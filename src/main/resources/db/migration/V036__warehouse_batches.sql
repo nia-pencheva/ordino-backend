@@ -4,7 +4,7 @@ CREATE TABLE warehouse_batches (
     quantity             DECIMAL(10, 3) UNSIGNED NOT NULL,
     expiry_date          DATE            NULL,
     order_id             BIGINT UNSIGNED NULL DEFAULT NULL,
-    created_at           TIMESTAMP       NOT NULL,
+    created_at           TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     CONSTRAINT fk_wb_warehouse_product_id FOREIGN KEY (warehouse_product_id) REFERENCES warehouse_products (id),
     CONSTRAINT fk_wb_order_id FOREIGN KEY (order_id) REFERENCES orders (id)

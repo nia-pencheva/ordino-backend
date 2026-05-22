@@ -4,7 +4,7 @@ CREATE TABLE warehouse_products (
     unit_id      INT UNSIGNED   NOT NULL,
     min_quantity DECIMAL(10, 3) UNSIGNED NOT NULL,
     active       BOOLEAN        NOT NULL DEFAULT TRUE,
-    created_at   TIMESTAMP      NOT NULL,
+    created_at   TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at   TIMESTAMP      NULL DEFAULT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_warehouse_products_product_id (product_id),

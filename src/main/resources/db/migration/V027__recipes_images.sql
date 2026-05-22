@@ -3,7 +3,7 @@ CREATE TABLE recipes_images (
     recipe_id  INT UNSIGNED  NOT NULL,
     image_path VARCHAR(500)  NOT NULL,
     position   INT UNSIGNED  NOT NULL,
-    created_at TIMESTAMP     NOT NULL,
+    created_at TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP     NULL DEFAULT NULL,
     PRIMARY KEY (id),
     INDEX idx_recipes_images_recipe_id (recipe_id),
