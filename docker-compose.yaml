@@ -22,6 +22,12 @@ services:
       - 8080:8080
     networks:
       - ordino
+    develop:
+      watch:
+        - action: rebuild
+          path: ./src
+        - action: rebuild
+          path: ./pom.xml
 
   phpmyadmin:
     container_name: ordino_phpmyadmin
