@@ -1,0 +1,49 @@
+package com.ordino.domain.warehouse.warehouse_batches.model.entity;
+
+import com.ordino.domain.orders.model.entity.Order;
+import com.ordino.domain.warehouse.products.model.entity.WarehouseProduct;
+import com.ordino.domain.warehouse.warehouse_batches.logs.model.entity.WarehouseBatchEventLog;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.List;
+
+@Entity
+@Table(name = "warehouse_batches")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString(exclude = {"warehouseProduct", "order", "eventLogs"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class WarehouseBatch {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
+    @Column(columnDefinition = "BIGINT UNSIGNED")
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "warehouse_product_id", nullable = false)
+    private WarehouseProduct warehouseProduct;
+
+    @Column(nullable = false, columnDefinition = "DECIMAL(10, 3) UNSIGNED")
+    private BigDecimal quantity;
+
+    @Column(name = "expiry_date", nullable = true)
+    private LocalDate expiryDate;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = true)
+    private Order order;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
+    private Instant createdAt;
+
+    @OneToMany(mappedBy = "warehouseBatch")
+    private List<WarehouseBatchEventLog> eventLogs;
+}
