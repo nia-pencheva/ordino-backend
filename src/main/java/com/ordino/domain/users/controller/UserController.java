@@ -2,8 +2,7 @@ package com.ordino.domain.users.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ordino.domain.users.model.dto.LoginRequestDTO;
-import com.ordino.domain.users.model.dto.LoginResponseDTO;
+import com.ordino.domain.users.model.dto.UserResponseDTO;
 import com.ordino.domain.users.service.UserService;
 
 import lombok.AllArgsConstructor;

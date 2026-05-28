@@ -37,12 +37,13 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable)
+        return http.csrf(AbstractHttpConfigurer::disable) // should enable
+                    .logout(AbstractHttpConfigurer::disable)
                     .cors(cors -> cors
                         .configurationSource(this::getCorsConfiguration)
                     )
                     .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/login", "/refresh", "/logout").permitAll()
                         .anyRequest().authenticated()
                     )
                     .sessionManagement(session -> 

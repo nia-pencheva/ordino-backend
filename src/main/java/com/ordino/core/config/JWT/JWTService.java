@@ -9,12 +9,13 @@ import java.util.function.Function;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.ordino.core.exception.CustomException;
+import com.ordino.core.exception.auth.InvalidJWTTokenException;
+import com.ordino.core.exception.auth.JWTTokenExpiredException;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -41,29 +42,16 @@ public class JWTService {
                     .compact();
     }
 
-    public String extractUsername(String token) {
+    public String extractUsername(String token) throws JWTTokenExpiredException, InvalidJWTTokenException {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-    }
-
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
-
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) throws JWTTokenExpiredException, InvalidJWTTokenException {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(String token) throws JWTTokenExpiredException, InvalidJWTTokenException {
         try {
             return Jwts.parser()
                         .verifyWith(getKey())
@@ -71,7 +59,10 @@ public class JWTService {
                         .parseSignedClaims(token)
                         .getPayload();
         } catch (JwtException | IllegalArgumentException e) {
-            throw new CustomException("Invalid JWT token");
+            if (e instanceof ExpiredJwtException) {
+                throw new JWTTokenExpiredException();
+            }
+            throw new InvalidJWTTokenException();
         }
     }
 

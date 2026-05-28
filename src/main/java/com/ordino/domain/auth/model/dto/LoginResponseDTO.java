@@ -1,4 +1,4 @@
-package com.ordino.domain.users.model.dto;
+package com.ordino.domain.auth.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,4 +8,5 @@ import lombok.Setter;
 public class LoginResponseDTO {
     private LoginResponseUserDTO user;
     private String token;
+    private String refreshToken;
 }
