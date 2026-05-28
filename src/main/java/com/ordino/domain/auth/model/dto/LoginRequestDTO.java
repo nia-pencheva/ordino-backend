@@ -1,4 +1,4 @@
-package com.ordino.domain.users.model.dto;
+package com.ordino.domain.auth.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;
