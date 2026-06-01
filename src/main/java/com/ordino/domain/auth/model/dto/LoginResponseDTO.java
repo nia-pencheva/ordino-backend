@@ -9,4 +9,5 @@ public class LoginResponseDTO {
     private LoginResponseUserDTO user;
     private String token;
     private String refreshToken;
+    private Boolean passwordChangeRequired;
 }
