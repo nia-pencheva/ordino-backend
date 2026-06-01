@@ -1,0 +1,47 @@
+package com.ordino.domain.recipes.logs.review.model.entity;
+
+import com.ordino.domain.recipes.model.entity.Recipe;
+import com.ordino.domain.users.model.entity.User;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.Instant;
+
+@Entity
+@Table(name = "recipe_review_logs")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString(exclude = {"recipe", "reviewer", "recipeReviewEvent"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class RecipeReviewLog {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
+    @Column(columnDefinition = "BIGINT UNSIGNED")
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "recipe_id", nullable = false)
+    private Recipe recipe;
+
+    @ManyToOne
+    @JoinColumn(name = "reviewer_id", nullable = false)
+    private User reviewer;
+
+    @Column(nullable = false, columnDefinition = "JSON")
+    private String snapshot;
+
+    @Column(name = "return_notes", nullable = true, columnDefinition = "TEXT")
+    private String returnNotes;
+
+    @ManyToOne
+    @JoinColumn(name = "recipe_review_event_id", nullable = false)
+    private RecipeReviewEvent recipeReviewEvent;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
+    private Instant createdAt;
+}
