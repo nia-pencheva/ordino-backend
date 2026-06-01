@@ -11,15 +11,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ordino.core.config.JWT.JWTAuthenticationEntryPoint;
 import com.ordino.core.config.JWT.JWTFilter;
+import com.ordino.core.config.JWT.JWTService;
+import com.ordino.core.config.JWT.JsonErrorWriter;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -32,11 +35,10 @@ public class SecurityConfiguration {
     @Value("${frontend.url}")
     private String frontendURL;
 
-    private final JWTFilter jwtFilter;
     private final JWTAuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JWTFilter jwtFilter, PasswordChangedFilter passwordChangedFilter) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable) // should enable
                     .logout(AbstractHttpConfigurer::disable)
                     .cors(cors -> cors
@@ -46,10 +48,11 @@ public class SecurityConfiguration {
                         .requestMatchers("/login", "/refresh", "/logout").permitAll()
                         .anyRequest().authenticated()
                     )
-                    .sessionManagement(session -> 
+                    .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     )
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                    .addFilterAfter(passwordChangedFilter, UsernamePasswordAuthenticationFilter.class)
                     .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(authenticationEntryPoint)
                     )
@@ -81,5 +84,15 @@ public class SecurityConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
+    }
+
+    @Bean
+    public JWTFilter jwtFilter(JWTService jwtService, UserDetailsService userDetailsService, JsonErrorWriter jsonErrorWriter) {
+        return new JWTFilter(jwtService, userDetailsService, jsonErrorWriter);
+    }
+
+    @Bean
+    public PasswordChangedFilter passwordChangedFilter(ObjectMapper objectMapper) {
+        return new PasswordChangedFilter(objectMapper);
     }
 }
