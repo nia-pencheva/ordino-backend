@@ -12,6 +12,6 @@ CREATE TABLE roles_incompatibilities (
 INSERT INTO roles_incompatibilities (role_id, incompatible_role_id)
 SELECT LEAST(r1.id, r2.id), GREATEST(r1.id, r2.id)
 FROM roles r1
-JOIN roles r2 ON r1.role = 'LINE_COOK' AND r2.role = 'CHEF';
+JOIN roles r2 ON r1.role = 'line cook' AND r2.role = 'chef';
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON ${dbName}.roles_incompatibilities TO '${appUser}'@'%';
