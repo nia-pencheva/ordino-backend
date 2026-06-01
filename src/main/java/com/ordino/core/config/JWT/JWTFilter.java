@@ -10,6 +10,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.ordino.core.exception.auth.InvalidJWTTokenException;
 import com.ordino.core.exception.auth.JWTTokenExpiredException;
+import com.ordino.core.exception.response.UnauthorizedExceptionResponse;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

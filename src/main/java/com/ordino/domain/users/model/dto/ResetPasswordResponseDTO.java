@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserRoleDTO {
-    private String role;
+public class ResetPasswordResponseDTO {
+    private String newPassword;
 }
