@@ -1,4 +1,4 @@
-package com.ordino.domain.users.service;
+package com.ordino.domain.auth.service;
 
 import com.ordino.core.exception.auth.InvalidRefreshTokenException;
 import com.ordino.core.exception.auth.RefreshTokenExpiredException;
@@ -58,10 +58,5 @@ public class RefreshTokenService {
     @Transactional
     public void deleteByToken(String rawToken) {
         repository.findByToken(rawToken).ifPresent(repository::delete);
-    }
-
-    @Transactional
-    public void deleteByUser(User user) {
-        repository.deleteByUser(user);
     }
 }
