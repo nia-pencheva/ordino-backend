@@ -75,7 +75,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(initialPassword));
         user.setRoles(roleRepository.findByRoleIn(dto.getRoles()));
         repository.save(user);
-
+        
         AddUserResponseDTO responseDTO = new AddUserResponseDTO();
         responseDTO.setInitialPassword(initialPassword);
 
@@ -95,7 +95,7 @@ public class UserService {
         boolean removingAdmin = !dto.getRoles().contains("admin");
 
         if (isSelf && currentlyAdmin && removingAdmin) {
-            throw new ForbiddenOperationException("CANNOT_REMOVE_OWN_ADMIN_ROLE");
+            throw new ForbiddenOperationException(List.of("Cannot remove own admin role"));
         }
 
         user.setRoles(roleRepository.findByRoleIn(dto.getRoles()));
@@ -112,7 +112,7 @@ public class UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(((DatabaseUserDetails) authentication.getPrincipal()).getUser().equals(user)) {
-            throw new ForbiddenOperationException("CANNOT_DELETE_OWN_ACCOUNT");
+            throw new ForbiddenOperationException(List.of("Cannot delete own account"));
         }
 
         user.setDeletedAt(Instant.now());

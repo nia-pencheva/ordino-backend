@@ -1,5 +1,6 @@
 package com.ordino.domain.users.validation.email;
 
+import com.ordino.core.util.PathVariablesUtil;
 import com.ordino.domain.users.repository.UserRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,28 +26,10 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
         if (email == null || email.isBlank()) {
             return true;
         }
-        Long excludeId = extractIdFromRequest();
+        Long excludeId = PathVariablesUtil.extractPathId(request);
         if (excludeId != null) {
             return !userRepository.existsByEmailAndIdNot(email, excludeId);
         }
         return !userRepository.existsByEmail(email);
-    }
-
-    @SuppressWarnings("unchecked")
-    private Long extractIdFromRequest() {
-        Map<String, String> pathVariables = (Map<String, String>)
-                request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        if (pathVariables == null) {
-            return null;
-        }
-        String raw = pathVariables.get("id");
-        if (raw == null) {
-            return null;
-        }
-        try {
-            return Long.parseLong(raw);
-        } catch (NumberFormatException e) {
-            return null;
-        }
     }
 }
