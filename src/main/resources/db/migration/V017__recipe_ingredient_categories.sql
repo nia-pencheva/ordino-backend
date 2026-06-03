@@ -3,7 +3,7 @@ CREATE TABLE recipe_ingredient_categories (
     category           VARCHAR(100)  NOT NULL,
     parent_category_id INT UNSIGNED  NULL,
     created_at         TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at         TIMESTAMP     NULL DEFAULT NULL,
+    updated_at         TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE KEY uq_recipe_ingredient_categories (category, parent_category_id),
     CONSTRAINT fk_recipe_ingredient_categories_parent FOREIGN KEY (parent_category_id) REFERENCES recipe_ingredient_categories (id)

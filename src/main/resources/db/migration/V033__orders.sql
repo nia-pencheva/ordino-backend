@@ -8,7 +8,7 @@ CREATE TABLE orders (
     notes             TEXT            NULL,
     order_status_id   INT UNSIGNED    NOT NULL,
     created_at        TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at        TIMESTAMP       NULL DEFAULT NULL,
+    updated_at        TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     CONSTRAINT fk_orders_placed_by FOREIGN KEY (placed_by) REFERENCES users (id),
     CONSTRAINT fk_orders_finalized_by FOREIGN KEY (finalized_by) REFERENCES users (id),

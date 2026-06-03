@@ -4,7 +4,7 @@ CREATE TABLE menus_sections_recipes (
     recipe_id       INT UNSIGNED NOT NULL,
     position        INT UNSIGNED NOT NULL,
     created_at      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP    NULL DEFAULT NULL,
+    updated_at      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE KEY uq_menus_sections_recipes_section_recipe (menu_section_id, recipe_id),
     UNIQUE KEY uq_menus_sections_recipes_section_position (menu_section_id, position),

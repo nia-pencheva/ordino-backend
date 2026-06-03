@@ -6,7 +6,7 @@ CREATE TABLE orders_products (
     expected_quantity    DECIMAL(10, 3) UNSIGNED NOT NULL,
     received_quantity    DECIMAL(10, 3) UNSIGNED NULL,
     created_at           TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at           TIMESTAMP       NULL DEFAULT NULL,
+    updated_at           TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE KEY uq_orders_products (order_id, warehouse_product_id),
     CONSTRAINT fk_op_order_id FOREIGN KEY (order_id) REFERENCES orders (id),
