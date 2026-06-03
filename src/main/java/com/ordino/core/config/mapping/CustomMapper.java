@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 public class CustomMapper extends ModelMapper {
     public CustomMapper() {
         this.getConfiguration()
-                .setSkipNullEnabled(true)
                 .setFieldMatchingEnabled(true)
                 .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
     }
