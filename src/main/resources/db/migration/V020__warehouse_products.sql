@@ -5,7 +5,7 @@ CREATE TABLE warehouse_products (
     min_quantity DECIMAL(10, 3) UNSIGNED NOT NULL,
     active       BOOLEAN        NOT NULL DEFAULT TRUE,
     created_at   TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at   TIMESTAMP      NULL DEFAULT NULL,
+    updated_at   TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE KEY uq_warehouse_products_product_id (product_id),
     CONSTRAINT fk_warehouse_products_product_id FOREIGN KEY (product_id) REFERENCES products (id),

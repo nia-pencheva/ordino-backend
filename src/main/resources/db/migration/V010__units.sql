@@ -3,7 +3,7 @@ CREATE TABLE units (
     unit         VARCHAR(50)  NOT NULL,
     abbreviation VARCHAR(30)  NOT NULL,
     created_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at   TIMESTAMP    NULL DEFAULT NULL,
+    updated_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted_at   TIMESTAMP    NULL DEFAULT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_units_unit (unit),
