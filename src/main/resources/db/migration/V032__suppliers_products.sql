@@ -5,7 +5,7 @@ CREATE TABLE suppliers_products (
     price                DECIMAL(10, 2) UNSIGNED NOT NULL,
     min_order_quantity   DECIMAL(10, 3) UNSIGNED NOT NULL,
     created_at           TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at           TIMESTAMP      NULL DEFAULT NULL,
+    updated_at           TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE KEY uq_suppliers_products (supplier_id, warehouse_product_id),
     CONSTRAINT fk_sp_supplier_id FOREIGN KEY (supplier_id) REFERENCES suppliers (id),

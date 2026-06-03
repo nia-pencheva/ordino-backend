@@ -4,7 +4,7 @@ CREATE TABLE menus_sections (
     title      VARCHAR(100)  NOT NULL,
     position   INT UNSIGNED  NOT NULL,
     created_at TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP     NULL DEFAULT NULL,
+    updated_at TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE KEY uq_menus_sections_menu_title (menu_id, title),
     UNIQUE KEY uq_menus_sections_menu_position (menu_id, position),

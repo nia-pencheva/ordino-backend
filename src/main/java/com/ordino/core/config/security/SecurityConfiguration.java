@@ -45,7 +45,9 @@ public class SecurityConfiguration {
                         .configurationSource(this::getCorsConfiguration)
                     )
                     .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/refresh", "/logout").permitAll()
+                        .requestMatchers("/login", "/refresh", "/logout", "/error").permitAll()
+                        .requestMatchers("/users", "/users/**").hasAuthority("admin")
+                        .requestMatchers("/products", "/products/**").hasAnyAuthority("chef", "warehouse manager")
                         .anyRequest().authenticated()
                     )
                     .sessionManagement(session ->

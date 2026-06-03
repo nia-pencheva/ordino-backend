@@ -37,7 +37,7 @@ public class Unit {
     private Instant createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at", nullable = true, columnDefinition = "TIMESTAMP")
+    @Column(name = "updated_at", nullable = false, columnDefinition = "TIMESTAMP")
     private Instant updatedAt;
 
     @Column(name = "deleted_at", nullable = true, columnDefinition = "TIMESTAMP")

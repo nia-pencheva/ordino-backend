@@ -7,7 +7,7 @@ CREATE TABLE users (
     username            VARCHAR(50)   NOT NULL,
     full_name           VARCHAR(100)  NOT NULL,
     created_at          TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at          TIMESTAMP     NULL DEFAULT NULL,
+    updated_at          TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted_at          TIMESTAMP     NULL DEFAULT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_users_email (email),
