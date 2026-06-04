@@ -48,6 +48,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/login", "/refresh", "/logout", "/error").permitAll()
                         .requestMatchers("/users", "/users/**").hasAuthority("admin")
                         .requestMatchers("/products", "/products/**").hasAnyAuthority("chef", "warehouse manager")
+                        .requestMatchers("/units", "/units/**").hasAnyAuthority("chef", "warehouse manager")
                         .anyRequest().authenticated()
                     )
                     .sessionManagement(session ->
