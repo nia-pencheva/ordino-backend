@@ -5,13 +5,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ordino.domain.products.model.dto.ProductRequestDTO;
 import com.ordino.domain.products.model.dto.ProductResponseDTO;
+import com.ordino.domain.products.model.dto.ProductsPageResponseDTO;
 import com.ordino.domain.products.service.ProductService;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
-
-import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,7 +29,7 @@ public class ProductsController {
     private ProductService productService;
 
     @GetMapping()
-    public ResponseEntity<List<ProductResponseDTO>> getProducts(
+    public ResponseEntity<ProductsPageResponseDTO> getProducts(
         @RequestParam(required = false) String name,
         @RequestParam(required = false) @Positive Integer page,
         @RequestParam(required = false) Boolean active
