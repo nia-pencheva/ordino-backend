@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ordino.core.exception.ForbiddenOperationException;
 import com.ordino.domain.products.model.dto.ProductRequestDTO;
 import com.ordino.domain.products.model.dto.ProductResponseDTO;
+import com.ordino.domain.products.model.dto.ProductsPageResponseDTO;
 import com.ordino.domain.products.model.entity.Product;
 import com.ordino.domain.products.repository.ProductRepository;
 import com.ordino.domain.warehouse.products.model.entity.WarehouseProduct;
@@ -27,7 +28,7 @@ public class ProductService {
     private final ProductRepository repository;
     private final ModelMapper mapper;
 
-    public List<ProductResponseDTO> getProducts(String name, Boolean active, Integer page) {
+    public ProductsPageResponseDTO getProducts(String name, Boolean active, Integer page) {
         Integer pageNumber = page != null ? page - 1 : 0;
         Boolean activeOnly = active != null ? active : true;
         PageRequest pageRequest = PageRequest.of(pageNumber, this.pageSize);
@@ -36,7 +37,11 @@ public class ProductService {
                                 ? repository.findByActive(activeOnly, pageRequest)
                                 : repository.searchByNameAndActive(name, activeOnly, pageRequest);
 
-        return productsPage.stream()
+        ProductsPageResponseDTO responseDTO = new ProductsPageResponseDTO();
+
+        responseDTO.setProducts(
+            productsPage
+                .stream()
                 .map(product -> {
                     ProductResponseDTO dto = mapper.map(product, ProductResponseDTO.class);
 
@@ -45,7 +50,13 @@ public class ProductService {
 
                     return dto;
                 })
-                .toList();
+                .toList()
+        );
+
+        responseDTO.setTotalElements(productsPage.getTotalElements());
+        responseDTO.setTotalPages(productsPage.getTotalPages());
+
+        return responseDTO;
     }
 
     public ProductResponseDTO getProduct(Long id) throws EntityNotFoundException {
