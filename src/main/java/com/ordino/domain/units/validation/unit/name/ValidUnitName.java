@@ -1,4 +1,4 @@
-package com.ordino.domain.units.validation.unit;
+package com.ordino.domain.units.validation.unit.name;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

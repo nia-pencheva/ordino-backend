@@ -1,4 +1,4 @@
-package com.ordino.domain.units.validation.abbreviation;
+package com.ordino.domain.units.validation.unit.abbreviation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

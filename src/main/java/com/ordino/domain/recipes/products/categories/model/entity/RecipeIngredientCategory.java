@@ -1,7 +1,8 @@
 package com.ordino.domain.recipes.products.categories.model.entity;
 
 import com.ordino.domain.products.model.entity.Product;
-import com.ordino.domain.units.model.entity.Unit;
+import com.ordino.domain.units.model.entity.UnitCategory;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = {"parentCategory", "childCategories", "allowedUnits", "products"})
+@ToString(exclude = {"parentCategory", "childCategories", "allowedUnitCategories", "products"})
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RecipeIngredientCategory {
 
@@ -44,11 +45,11 @@ public class RecipeIngredientCategory {
 
     @ManyToMany
     @JoinTable(
-        name = "recipe_ingredient_categories_allowed_units",
+        name = "recipe_ingredient_categories_allowed_unit_categories",
         joinColumns = @JoinColumn(name = "recipes_ingredient_category_id"),
-        inverseJoinColumns = @JoinColumn(name = "unit_id")
+        inverseJoinColumns = @JoinColumn(name = "unit_category_id")
     )
-    private List<Unit> allowedUnits;
+    private List<UnitCategory> allowedUnitCategories;
 
     @ManyToMany
     @JoinTable(
