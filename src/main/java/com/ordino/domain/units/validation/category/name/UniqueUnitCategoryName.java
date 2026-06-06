@@ -1,4 +1,4 @@
-package com.ordino.domain.units.validation.abbreviation;
+package com.ordino.domain.units.validation.category.name;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -6,11 +6,11 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = UniqueUnitAbbreviationValidator.class)
+@Constraint(validatedBy = UniqueUnitCategoryNameValidator.class)
 @Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UniqueUnitAbbreviation {
-    String message() default "Unit abbreviation is already taken";
+public @interface UniqueUnitCategoryName {
+    String message() default "Unit category name is already taken";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
