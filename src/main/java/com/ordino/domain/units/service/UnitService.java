@@ -2,6 +2,7 @@ package com.ordino.domain.units.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -9,10 +10,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.ordino.core.exception.ForbiddenOperationException;
-import com.ordino.domain.units.model.dto.UnitRequestDTO;
-import com.ordino.domain.units.model.dto.UnitResponseDTO;
-import com.ordino.domain.units.model.dto.UnitsPageResponseDTO;
+import com.ordino.domain.units.model.dto.all_units.AllUnitsResponseDTO;
+import com.ordino.domain.units.model.dto.all_units.UnitCategoryForAllUnitsResponseDTO;
+import com.ordino.domain.units.model.dto.all_units.UnitForAllUnitsResponseDTO;
+import com.ordino.domain.units.model.dto.edit.EditUnitCategoryResponseDTO;
+import com.ordino.domain.units.model.dto.edit.EditUnitResponseDTO;
+import com.ordino.domain.units.model.dto.edit.UnitCategoryForEditUnitResponseDTO;
+import com.ordino.domain.units.model.dto.save.SaveUnitCategoryRequestDTO;
+import com.ordino.domain.units.model.dto.save.SaveUnitRequestDTO;
 import com.ordino.domain.units.model.entity.Unit;
+import com.ordino.domain.units.model.entity.UnitCategory;
+import com.ordino.domain.units.repository.UnitCategoryRepository;
 import com.ordino.domain.units.repository.UnitRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -23,27 +31,45 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class UnitService {
     private final UnitRepository repository;
+    private final UnitCategoryRepository categoryRepository;
     private final ModelMapper mapper;
 
-    public UnitsPageResponseDTO getUnits(Integer page, Integer pageSize) {
+    public AllUnitsResponseDTO getAllUnits(Integer page, Integer pageSize) {
         Integer pageNumber = page != null ? page - 1 : 0;
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
-        Page<Unit> unitsPage = repository.findAll(pageRequest);
-        
-        UnitsPageResponseDTO responseDTO = new UnitsPageResponseDTO();
+        Page<UnitCategory> unitsPage = categoryRepository.findAllWithUnitsOrderById(pageRequest);
 
-        responseDTO.setUnits(
+        AllUnitsResponseDTO responseDTO = new AllUnitsResponseDTO();
+
+        responseDTO.setUnitCategories(
             unitsPage
                 .stream()
-                .map(unit -> {
-                    UnitResponseDTO dto = mapper.map(unit, UnitResponseDTO.class);
+                .map(unitCategory -> {
+                    UnitCategoryForAllUnitsResponseDTO unitCategoryResponseDTO = mapper.map(unitCategory, UnitCategoryForAllUnitsResponseDTO.class);
 
-                    dto.setDeleteForbiddenReasons(canBeDeleted(unit));
+                    unitCategoryResponseDTO.setUnits(
+                        unitCategory.getUnits()
+                                    .stream()
+                                    .map(unit -> {
+                                        UnitForAllUnitsResponseDTO unitResponseDTO = mapper.map(unit, UnitForAllUnitsResponseDTO.class);
 
-                    return dto;
+                                        unitResponseDTO.setDeleteForbiddenReasons(unitCanBeDeleted(unit));
+
+                                        return unitResponseDTO;
+                                    })
+                                    .collect(Collectors.toList())
+                    );
+
+                    unitCategoryResponseDTO.setCanBeDeleted(
+                        !unitCategoryResponseDTO.getUnits()
+                                                .stream()  
+                                                .anyMatch(unit -> !unit.getDeleteForbiddenReasons().isEmpty())
+                    );
+
+                    return unitCategoryResponseDTO;
                 })
-                .toList()
+                .collect(Collectors.toList())
         );
 
         responseDTO.setTotalElements(unitsPage.getTotalElements());
@@ -52,22 +78,37 @@ public class UnitService {
         return responseDTO;
     }
 
-    public UnitResponseDTO getUnit(Long id) throws EntityNotFoundException {
+    public EditUnitResponseDTO getUnitForEditing(Long id) throws EntityNotFoundException {
         Unit unit = repository.findById(id)
                                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
-        return mapper.map(unit, UnitResponseDTO.class);
+        EditUnitResponseDTO responseDTO = mapper.map(unit, EditUnitResponseDTO.class);
+
+        responseDTO.setAllUnitCategories(
+            categoryRepository.findAll()
+                                .stream()
+                                .map(category -> mapper.map(category, UnitCategoryForEditUnitResponseDTO.class))
+                                .toList()
+        );
+
+        return responseDTO;
     }
 
-    public void addUnit(UnitRequestDTO dto) {
-        repository.save(mapper.map(dto, Unit.class));
+    public void addUnit(SaveUnitRequestDTO dto) {
+        Unit unit = new Unit();
+        unit.setUnit(dto.getUnit());
+        unit.setAbbreviation(dto.getAbbreviation());
+        unit.setUnitCategory(categoryRepository.getReferenceById(dto.getCategoryId()));
+        repository.save(unit);
     }
 
-    public void saveUnit(Long id, UnitRequestDTO dto) throws EntityNotFoundException {
+    public void saveUnit(Long id, SaveUnitRequestDTO dto) throws EntityNotFoundException {
         Unit unit = repository.findById(id)
                                     .orElseThrow(() -> new EntityNotFoundException("Unit not found"));
 
-        mapper.map(dto, unit);
+        unit.setUnit(dto.getUnit());
+        unit.setAbbreviation(dto.getAbbreviation());
+        unit.setUnitCategory(categoryRepository.getReferenceById(dto.getCategoryId()));
         repository.save(unit);
     }
 
@@ -76,14 +117,14 @@ public class UnitService {
         Unit unit = repository.findById(id)
                                 .orElseThrow(() -> new EntityNotFoundException("Unit not found"));
 
-        List<String> deleteForbiddenReasons = canBeDeleted(unit);
+        List<String> deleteForbiddenReasons = unitCanBeDeleted(unit);
         if(!deleteForbiddenReasons.isEmpty())
             throw new ForbiddenOperationException(deleteForbiddenReasons);
 
         repository.delete(unit);
     }
 
-    private List<String> canBeDeleted(Unit unit) {
+    public List<String> unitCanBeDeleted(Unit unit) {
         List<String> reasons = new ArrayList<>();
 
         if (!unit.getRecipeProducts().isEmpty()) {
@@ -95,5 +136,36 @@ public class UnitService {
         }
 
         return reasons;
+    }
+
+    public void addUnitCategory(SaveUnitCategoryRequestDTO dto) {
+        categoryRepository.save(mapper.map(dto, UnitCategory.class));
+    }
+
+    public void saveUnitCategory(Long id, SaveUnitCategoryRequestDTO dto) {
+        UnitCategory unitCategory = categoryRepository.findById(id)
+                                                .orElseThrow(() -> new EntityNotFoundException("Unit category not found"));
+
+        mapper.map(dto, unitCategory);
+        categoryRepository.save(unitCategory);
+    }
+
+    @Transactional
+    public void deleteUnitCategory(Long id) {
+        UnitCategory unitCategory = categoryRepository.findById(id)
+                                                .orElseThrow(() -> new EntityNotFoundException("Unit category not found"));
+
+        if(unitCategory.getUnits().stream().anyMatch(unit -> !unitCanBeDeleted(unit).isEmpty())) {
+            throw new ForbiddenOperationException(List.of("Cannot delete unit category that has undeletable units"));
+        }
+
+        categoryRepository.delete(unitCategory);
+    }
+
+    public EditUnitCategoryResponseDTO getUnitCategoryForEditing(Long id) {
+        UnitCategory unitCategory = categoryRepository.findById(id)
+                                                    .orElseThrow(() -> new EntityNotFoundException("Unit category not found"));
+
+        return mapper.map(unitCategory, EditUnitCategoryResponseDTO.class);
     }
 }

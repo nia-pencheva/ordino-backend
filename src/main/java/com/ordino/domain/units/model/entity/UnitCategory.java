@@ -1,7 +1,7 @@
 package com.ordino.domain.units.model.entity;
 
-import com.ordino.domain.recipes.products.model.entity.RecipeProduct;
-import com.ordino.domain.warehouse.products.model.entity.WarehouseProduct;
+import com.ordino.domain.recipes.products.categories.model.entity.RecipeIngredientCategory;
+import com.ordino.domain.warehouse.products.categories.model.entity.WarehouseProductCategory;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,13 +10,13 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
-@Table(name = "units")
+@Table(name = "unit_categories")
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = {"recipeProducts", "warehouseProducts"})
+@ToString(exclude = {"units", "allowedInIngredientCategories", "allowedInWarehouseCategories"})
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Unit {
+public class UnitCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +25,7 @@ public class Unit {
     private Long id;
 
     @Column(nullable = false, unique = true, length = 50)
-    private String unit;
-
-    @Column(nullable = false, unique = true, length = 30)
-    private String abbreviation;
+    private String category;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
@@ -38,15 +35,12 @@ public class Unit {
     @Column(name = "updated_at", nullable = false, columnDefinition = "TIMESTAMP")
     private Instant updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "unit_category_id", nullable = false)
-    private UnitCategory unitCategory;
+    @OneToMany(mappedBy = "unitCategory", cascade = CascadeType.ALL)
+    private List<Unit> units;
 
-    @OneToMany(mappedBy = "unit")
-    private List<RecipeProduct> recipeProducts;
+    @ManyToMany(mappedBy = "allowedUnitCategories")
+    private List<RecipeIngredientCategory> allowedInIngredientCategories;
 
-    @OneToMany(mappedBy = "unit")
-    private List<WarehouseProduct> warehouseProducts;
-
-
+    @ManyToMany(mappedBy = "allowedUnitCategories")
+    private List<WarehouseProductCategory> allowedInWarehouseCategories;
 }
