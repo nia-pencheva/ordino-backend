@@ -5,7 +5,7 @@ CREATE TABLE products_recipe_ingredient_categories (
     PRIMARY KEY (id),
     UNIQUE KEY uq_products_recipe_ingredient_categories (product_id, recipe_ingredient_category_id),
     CONSTRAINT fk_pric_product_id FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE,
-    CONSTRAINT fk_pric_recipe_ingredient_category_id FOREIGN KEY (recipe_ingredient_category_id) REFERENCES recipe_ingredient_categories (id)
+    CONSTRAINT fk_pric_recipe_ingredient_category_id FOREIGN KEY (recipe_ingredient_category_id) REFERENCES recipe_ingredient_categories (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON ${dbName}.products_recipe_ingredient_categories TO '${appUser}'@'%';
