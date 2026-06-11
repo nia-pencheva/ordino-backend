@@ -46,17 +46,17 @@ public class RefreshTokenService {
         log.debug("Token expiresAt: {}, now: {}", refreshToken.getExpiresAt(), Instant.now());
 
         if (refreshToken.getExpiresAt().isBefore(Instant.now())) {
-            repository.delete(refreshToken);
+            repository.deleteByToken(rawToken);
             throw new RefreshTokenExpiredException();
         }
 
         User user = refreshToken.getUser();
-        repository.delete(refreshToken);
+        repository.deleteByToken(rawToken);
         return user;
     }
 
     @Transactional
     public void deleteByToken(String rawToken) {
-        repository.findByToken(rawToken).ifPresent(repository::delete);
+        repository.deleteByToken(rawToken);
     }
 }

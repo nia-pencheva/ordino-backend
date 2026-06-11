@@ -1,7 +1,5 @@
 package com.ordino.domain.units.model.entity;
 
-import com.ordino.domain.recipes.products.categories.model.entity.RecipeIngredientCategory;
-import com.ordino.domain.warehouse.products.categories.model.entity.WarehouseProductCategory;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = {"units", "allowedInIngredientCategories", "allowedInWarehouseCategories"})
+@ToString(exclude = {"units"})
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class UnitCategory {
 
@@ -37,10 +35,4 @@ public class UnitCategory {
 
     @OneToMany(mappedBy = "unitCategory", cascade = CascadeType.ALL)
     private List<Unit> units;
-
-    @ManyToMany(mappedBy = "allowedUnitCategories")
-    private List<RecipeIngredientCategory> allowedInIngredientCategories;
-
-    @ManyToMany(mappedBy = "allowedUnitCategories")
-    private List<WarehouseProductCategory> allowedInWarehouseCategories;
 }

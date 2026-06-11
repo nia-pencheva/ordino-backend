@@ -1,10 +1,15 @@
 package com.ordino.domain.users.service;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,8 +20,10 @@ import com.ordino.core.config.security.DatabaseUserDetails;
 import com.ordino.domain.auth.repository.RefreshTokenRepository;
 import com.ordino.domain.users.model.dto.AddUserResponseDTO;
 import com.ordino.domain.users.model.dto.ResetPasswordResponseDTO;
+import com.ordino.domain.users.model.dto.RoleResponseDTO;
 import com.ordino.domain.users.model.dto.UserRequestDTO;
 import com.ordino.domain.users.model.dto.UserResponseDTO;
+import com.ordino.domain.users.model.dto.UsersPageResponseDTO;
 import com.ordino.domain.users.model.entity.Role;
 import com.ordino.domain.users.model.entity.User;
 import com.ordino.domain.users.repository.RoleRepository;
@@ -36,20 +43,44 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
     
-    public List<UserResponseDTO> getUsers() {
-        return repository.findAllWithRoles()
-                            .stream()
-                            .map(user -> {
-                                UserResponseDTO dto = mapper.map(user, UserResponseDTO.class);
-                                dto.setRoles(
-                                    user.getRoles()
-                                        .stream()
-                                        .map(Role::getRole)
-                                        .collect(Collectors.toList())
-                                );
-                                return dto;
-                            })
-                            .collect(Collectors.toList());
+    public UsersPageResponseDTO getUsers(String search, Integer page, Integer pageSize, Long roleId) {
+        Integer pageNumber = page != null ? page - 1 : 0;
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+
+        Page<User> usersPage = (search == null)
+                                    ? repository.findAllWithRolesPaginated(roleId, pageRequest)
+                                    : repository.searchUsers(search, roleId, pageRequest);
+
+        UsersPageResponseDTO responseDTO = new UsersPageResponseDTO();
+
+        responseDTO.setUsers(
+            usersPage.stream() 
+                        .map(user -> {
+                            UserResponseDTO userResponseDTO = mapper.map(user, UserResponseDTO.class);
+
+                            userResponseDTO.setRoles(
+                                user.getRoles()
+                                    .stream()
+                                    .map(Role::getRole)
+                                    .toList()  
+                            );
+
+                            return userResponseDTO;
+                        })  
+                        .toList()
+        );
+        
+        responseDTO.setTotalElements(usersPage.getTotalElements());
+        responseDTO.setTotalPages(usersPage.getTotalPages());
+
+        return responseDTO;
+    }
+
+    public Set<RoleResponseDTO> getRoles() {
+        return repository.findAllDistinctRoles()
+                        .stream()
+                        .map(role -> mapper.map(role, RoleResponseDTO.class))
+                        .collect(Collectors.toSet());
     }
 
     public UserResponseDTO getUser(Long id) throws EntityNotFoundException {

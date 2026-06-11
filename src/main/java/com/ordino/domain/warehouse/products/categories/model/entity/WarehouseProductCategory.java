@@ -1,7 +1,6 @@
 package com.ordino.domain.warehouse.products.categories.model.entity;
 
 import com.ordino.domain.products.model.entity.Product;
-import com.ordino.domain.units.model.entity.UnitCategory;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = {"parentCategory", "childCategories", "allowedUnitCategories", "products"})
+@ToString(exclude = {"parentCategory", "childCategories", "products"})
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class WarehouseProductCategory {
 
@@ -42,14 +41,6 @@ public class WarehouseProductCategory {
 
     @OneToMany(mappedBy = "parentCategory")
     private List<WarehouseProductCategory> childCategories;
-
-    @ManyToMany
-    @JoinTable(
-        name = "warehouse_product_categories_allowed_unit_categories",
-        joinColumns = @JoinColumn(name = "warehouse_product_category_id"),
-        inverseJoinColumns = @JoinColumn(name = "unit_category_id")
-    )
-    private List<UnitCategory> allowedUnitCategories;
 
     @ManyToMany
     @JoinTable(

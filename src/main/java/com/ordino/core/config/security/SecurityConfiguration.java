@@ -50,7 +50,8 @@ public class SecurityConfiguration {
                         .requestMatchers(
                             "/products", "/products/**",
                             "/unit-categories", "/unit-categories/**",
-                            "/units", "/units/**"
+                            "/units", "/units/**",
+                            "/recipe-ingredient-categories", "/recipe-ingredient-categories/**"
                         ).hasAnyAuthority("chef", "warehouse manager")
                         .anyRequest().authenticated()
                     )
