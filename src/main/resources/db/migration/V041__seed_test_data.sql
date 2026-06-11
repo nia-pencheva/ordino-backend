@@ -603,4 +603,30 @@ INSERT INTO users_roles (user_id, role_id) VALUES
     (13, 4),        -- Emile – kitchen staff
     (13, 5);        -- Emile – warehouse manager
 
+-- -------------------------------------------------------------
+-- Recipe categories
+-- -------------------------------------------------------------
+
+INSERT INTO recipe_categories (category) VALUES
+('Appetizers & Starters'),
+('Main Dishes'),
+('Side Dishes'),
+('Desserts'),
+('Breakfast & Brunch'),
+('Soups & Stews'),
+('Salads'),
+('Breads & Baking'),
+('Beverages & Cocktails'),
+('Snacks'),
+('Sauces, Dips & Dressings'),
+('Vegetarian & Vegan'),
+('Gluten-Free'),
+('Low-Carb & Keto'),
+('Quick & Easy (Under 30 Mins)'),
+('Slow Cooker & Instant Pot'),
+('Seafood'),
+('Poultry'),
+('Beef & Pork'),
+('Pasta & Noodles');
+
 SET FOREIGN_KEY_CHECKS = 1;

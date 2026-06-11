@@ -54,6 +54,7 @@ public class SecurityConfiguration {
                             "/recipe-ingredient-categories", "/recipe-ingredient-categories/**"
                         ).hasAnyAuthority("chef", "warehouse manager")
                         .requestMatchers("/recipe-categories", "/recipe-categories/**").hasAuthority("chef")
+                        .requestMatchers("/warehouse-product-categories", "/warehouse-product-categories/**").hasAuthority("warehouse manager")
                         .anyRequest().authenticated()
                     )
                     .sessionManagement(session ->
