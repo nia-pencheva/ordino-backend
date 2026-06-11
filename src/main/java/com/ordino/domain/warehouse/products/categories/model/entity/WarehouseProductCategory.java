@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = {"parentCategory", "childCategories", "products"})
+@ToString(exclude = {"parentCategory", "subCategories", "products"})
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class WarehouseProductCategory {
 
@@ -39,8 +39,8 @@ public class WarehouseProductCategory {
     @JoinColumn(name = "parent_category_id", nullable = true)
     private WarehouseProductCategory parentCategory;
 
-    @OneToMany(mappedBy = "parentCategory")
-    private List<WarehouseProductCategory> childCategories;
+    @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
+    private List<WarehouseProductCategory> subCategories;
 
     @ManyToMany
     @JoinTable(
