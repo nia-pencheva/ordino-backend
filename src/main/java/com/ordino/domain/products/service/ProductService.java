@@ -63,7 +63,14 @@ public class ProductService {
         Product product = repository.findById(id)
                                     .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
-        return mapper.map(product, ProductResponseDTO.class);
+        ProductResponseDTO responseDTO = new ProductResponseDTO();
+
+        mapper.map(product, responseDTO);
+
+        responseDTO.setDeactivateForbiddenReasons(canBeDeactivated(product));
+        responseDTO.setDeleteForbiddenReasons(canBeDeleted(product));
+
+        return responseDTO;
 
     }
 
