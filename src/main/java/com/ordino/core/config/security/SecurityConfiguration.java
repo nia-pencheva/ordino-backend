@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                             "/units", "/units/**",
                             "/recipe-ingredient-categories", "/recipe-ingredient-categories/**"
                         ).hasAnyAuthority("chef", "warehouse manager")
+                        .requestMatchers("/recipe-categories", "/recipe-categories/**").hasAuthority("chef")
                         .anyRequest().authenticated()
                     )
                     .sessionManagement(session ->
