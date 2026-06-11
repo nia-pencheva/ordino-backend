@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ordino.domain.recipes.products.categories.validation.id.LeafRecipeIngredientCategory;
 import com.ordino.domain.recipes.products.categories.model.dto.all_categories.RecipeIngredientCategoryForAllListResponseDTO;
 import com.ordino.domain.recipes.products.categories.model.dto.edit.EditRecipeIngredientCategoryResponseDTO;
 import com.ordino.domain.recipes.products.categories.model.dto.move.MoveRecipeIngredientCategoryRequestDTO;
@@ -66,7 +67,7 @@ public class RecipeIngredientCategoriesController {
 
     @GetMapping("/{id}/get-addable-products")
     public ResponseEntity<RecipeIngredientCategoryAddableProductsPageResponseDTO> getAddableProducts(
-        @PathVariable @Positive Long id, 
+        @PathVariable @Positive Long id,
         @RequestParam(required = false) String name,
         @RequestParam(required = false) @Positive Integer page, 
         @RequestParam(required = false) @Positive Integer pageSize
@@ -75,7 +76,7 @@ public class RecipeIngredientCategoriesController {
     }
     
     @PostMapping("/{id}/add-product")
-    public ResponseEntity<Void> addProductToCategory(@PathVariable @Positive Long id, @Valid @RequestBody AddProductToRecipeIngredientCategoryRequestDTO dto) {
+    public ResponseEntity<Void> addProductToCategory(@PathVariable @Positive @LeafRecipeIngredientCategory Long id, @Valid @RequestBody AddProductToRecipeIngredientCategoryRequestDTO dto) {
         categoryService.addProductToCategory(id, dto);
         return ResponseEntity.noContent().build();
     }

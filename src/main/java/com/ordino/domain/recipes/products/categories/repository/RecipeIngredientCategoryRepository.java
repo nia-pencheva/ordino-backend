@@ -17,6 +17,8 @@ public interface RecipeIngredientCategoryRepository extends JpaRepository<Recipe
 
     boolean existsByIdAndProductsId(Long categoryId, Long productId);
 
+    boolean existsByParentCategoryId(Long parentCategoryId);
+
     @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM RecipeIngredientCategory c JOIN c.products p WHERE c.id = :id")
     boolean hasProducts(@Param("id") Long id);
 
