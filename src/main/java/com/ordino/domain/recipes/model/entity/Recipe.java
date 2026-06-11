@@ -64,7 +64,7 @@ public class Recipe {
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
         name = "recipes_recipe_categories",
         joinColumns = @JoinColumn(name = "recipe_id"),
