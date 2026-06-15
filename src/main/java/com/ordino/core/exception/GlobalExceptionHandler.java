@@ -80,6 +80,13 @@ public class GlobalExceptionHandler {
                 .body(objectMapper.writeValueAsString(Map.of("errors", errors)));
     }
 
+    @ExceptionHandler(ValidationErrorsException.class)
+    public ResponseEntity<String> handleValidationErrors(ValidationErrorsException e) throws JsonProcessingException {
+        return ResponseEntity
+                .status(HttpStatusCode.valueOf(422))
+                .body(objectMapper.writeValueAsString(Map.of("errors", e.getErrors())));
+    }
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<String> handleConstraintViolation(ConstraintViolationException e) throws JsonProcessingException {
         List<Map<String, String>> errors = e.getConstraintViolations().stream()

@@ -10,10 +10,12 @@ CREATE TABLE recipes (
     created_by       INT UNSIGNED      NOT NULL,
     created_at       TIMESTAMP         NOT NULL DEFAULT CURRENT_TIMESTAMP,
     active           BOOLEAN           NULL DEFAULT TRUE,
+    approved_by      INT UNSIGNED      NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_recipes_title_active (title, active),
     CONSTRAINT fk_recipes_recipe_status_id FOREIGN KEY (recipe_status_id) REFERENCES recipe_statuses (id),
-    CONSTRAINT fk_recipes_created_by FOREIGN KEY (created_by) REFERENCES users (id)
+    CONSTRAINT fk_recipes_created_by FOREIGN KEY (created_by) REFERENCES users (id),
+    CONSTRAINT fk_recipes_approved_by FOREIGN KEY (approved_by) REFERENCES users (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON ${dbName}.recipes TO '${appUser}'@'%';

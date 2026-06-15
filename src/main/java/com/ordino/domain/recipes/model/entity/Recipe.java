@@ -13,6 +13,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -64,13 +65,17 @@ public class Recipe {
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
 
+    @ManyToOne
+    @JoinColumn(name = "approved_by", nullable = true)
+    private User approvedBy;
+
     @ManyToMany
     @JoinTable(
         name = "recipes_recipe_categories",
         joinColumns = @JoinColumn(name = "recipe_id"),
         inverseJoinColumns = @JoinColumn(name = "recipe_category_id")
     )
-    private List<RecipeCategory> recipeCategories;
+    private List<RecipeCategory> recipeCategories = new ArrayList<>();
 
     @OneToMany(mappedBy = "recipe")
     private List<RecipeImage> images;
@@ -84,8 +89,8 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe")
     private List<RecipeArchiveLog> archiveLogs;
 
-    @OneToMany(mappedBy = "recipe")
-    private List<RecipeProduct> recipeProducts;
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RecipeProduct> recipeProducts = new ArrayList<>();
 
     @OneToMany(mappedBy = "recipe")
     private List<MenuSectionRecipe> menuSectionRecipes;
