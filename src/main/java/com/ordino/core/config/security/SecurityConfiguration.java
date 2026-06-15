@@ -7,6 +7,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -29,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
@@ -46,6 +49,7 @@ public class SecurityConfiguration {
                     )
                     .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/refresh", "/logout", "/error").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users", "/users/roles").permitAll()
                         .requestMatchers("/users", "/users/**").hasAuthority("admin")
                         .requestMatchers(
                             "/products", "/products/**",
@@ -53,8 +57,11 @@ public class SecurityConfiguration {
                             "/units", "/units/**",
                             "/recipe-ingredient-categories", "/recipe-ingredient-categories/**"
                         ).hasAnyAuthority("chef", "warehouse manager")
+                        .requestMatchers(HttpMethod.GET, "/recipe-categories").hasAnyAuthority("kitchen staff", "line cook", "chef", "manager")
                         .requestMatchers("/recipe-categories", "/recipe-categories/**").hasAuthority("chef")
                         .requestMatchers("/warehouse-product-categories", "/warehouse-product-categories/**").hasAuthority("warehouse manager")
+                        .requestMatchers("/recipes/log", "/recipes/log/**").hasAnyAuthority("kitchen staff", "line cook", "chef", "manager")
+                        .requestMatchers("/recipes", "/recipes/**").hasAnyAuthority("kitchen staff", "line cook", "chef", "manager")
                         .anyRequest().authenticated()
                     )
                     .sessionManagement(session ->

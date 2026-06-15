@@ -31,6 +31,9 @@ public class RecipeArchiveLog {
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
+    @Column(nullable = false, columnDefinition = "JSON")
+    private String snapshot;
+
     @ManyToOne
     @JoinColumn(name = "recipe_archive_event_id", nullable = false)
     private RecipeArchiveEvent recipeArchiveEvent;
