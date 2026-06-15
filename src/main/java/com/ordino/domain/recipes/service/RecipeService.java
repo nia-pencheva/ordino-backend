@@ -233,7 +233,10 @@ public class RecipeService {
             case "RETURNED_FOR_REVISION" -> principal.hasAnyAuthority("line cook") && recipe.getCreatedBy().getId().equals(currentUserId);
             case "WAITING_FOR_APPROVAL" ->
                 (principal.hasAnyAuthority("line cook") && recipe.getCreatedBy().getId().equals(currentUserId))
-                || principal.hasAnyAuthority("chef");
+                || (principal.hasAnyAuthority("chef") && recipeReviewLogRepository
+                    .findFirstByRecipeIdAndRecipeReviewEventEventOrderByCreatedAtDesc(id, "SUBMITTED_FOR_APPROVAL")
+                    .map(log -> log.getReviewer().getId().equals(currentUserId))
+                    .orElse(false));
             case "DISCARDED" -> principal.hasAnyAuthority("line cook", "chef");
             default -> false;
         };
