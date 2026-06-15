@@ -34,6 +34,16 @@ public class DatabaseUserDetails implements UserDetails {
         return user.getUsername();
     }
 
+    public boolean hasAnyAuthority(String... authorities) {
+        Collection<? extends GrantedAuthority> granted = getAuthorities();
+        for (String authority : authorities) {
+            for (GrantedAuthority ga : granted) {
+                if (ga.getAuthority().equals(authority)) return true;
+            }
+        }
+        return false;
+    }
+
     public User getUser() {
         return user;
     }

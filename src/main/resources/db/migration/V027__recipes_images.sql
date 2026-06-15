@@ -8,7 +8,7 @@ CREATE TABLE recipes_images (
     PRIMARY KEY (id),
     INDEX idx_recipes_images_recipe_id (recipe_id),
     UNIQUE KEY uq_recipes_images_recipe_position (recipe_id, position),
-    CONSTRAINT fk_recipes_images_recipe_id FOREIGN KEY (recipe_id) REFERENCES recipes (id)
+    CONSTRAINT fk_recipes_images_recipe_id FOREIGN KEY (recipe_id) REFERENCES recipes (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON ${dbName}.recipes_images TO '${appUser}'@'%';

@@ -2,6 +2,7 @@ CREATE TABLE recipe_archive_logs (
     id                      BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id                 INT UNSIGNED    NOT NULL,
     recipe_id               INT UNSIGNED    NOT NULL,
+    snapshot                JSON            NOT NULL,
     recipe_archive_event_id INT UNSIGNED    NOT NULL,
     created_at              TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
