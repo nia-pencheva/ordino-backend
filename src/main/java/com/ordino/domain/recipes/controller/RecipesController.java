@@ -53,11 +53,6 @@ public class RecipesController {
         return ResponseEntity.ok().body(recipeService.getRecipe(id));
     }
 
-    /* @GetMapping("/{id}/history")
-    public ResponseEntity<List<RecipeHistoryEntryResponseDTO>> getRecipeHistory(@PathVariable @Positive Long id) {
-        return ResponseEntity.ok().body(recipeService.getRecipeHistory(id));
-    } */
-
     @PostMapping("/draft")
     public ResponseEntity<Long> createDraft(@Valid @RequestBody SaveDraftRequestDTO dto) {
         return ResponseEntity.ok().body(recipeService.createDraft(dto));

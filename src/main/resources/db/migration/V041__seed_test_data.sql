@@ -574,18 +574,18 @@ INSERT INTO products_warehouse_categories
 -- Users and their roles
 -- -------------------------------------------------------------
 INSERT INTO users (email, phone_number, password, password_changed_at, username, full_name) VALUES
-    ('remy@gusteaus.fr',     '+33100000002', '$2a$12$lhXVFbiWoa3crS6iEMTAcuEHOzppwGHk79RYCkfb46AtNcsF/pyhi', CURRENT_TIMESTAMP, 'remy',          'Remy'),               -- 2
-    ('linguini@gusteaus.fr', '+33100000003', '$2a$12$lhXVFbiWoa3crS6iEMTAcuEHOzppwGHk79RYCkfb46AtNcsF/pyhi', CURRENT_TIMESTAMP, 'linguini',      'Alfredo Linguini'),   -- 3
-    ('colette@gusteaus.fr',  '+33100000004', '$2a$12$lhXVFbiWoa3crS6iEMTAcuEHOzppwGHk79RYCkfb46AtNcsF/pyhi', CURRENT_TIMESTAMP, 'colette',       'Colette Tatou'),      -- 4
-    ('gusteau@gusteaus.fr',  '+33100000005', '$2a$12$lhXVFbiWoa3crS6iEMTAcuEHOzppwGHk79RYCkfb46AtNcsF/pyhi', CURRENT_TIMESTAMP, 'gusteau',       'Auguste Gusteau'),    -- 5
-    ('skinner@gusteaus.fr',  '+33100000006', '$2a$12$lhXVFbiWoa3crS6iEMTAcuEHOzppwGHk79RYCkfb46AtNcsF/pyhi', CURRENT_TIMESTAMP, 'skinner',       'Skinner'),            -- 6
-    ('ego@latourdargent.fr', '+33100000007', '$2a$12$lhXVFbiWoa3crS6iEMTAcuEHOzppwGHk79RYCkfb46AtNcsF/pyhi', CURRENT_TIMESTAMP, 'anton_ego',     'Anton Ego'),          -- 7
-    ('horst@gusteaus.fr',    '+33100000008', '$2a$12$lhXVFbiWoa3crS6iEMTAcuEHOzppwGHk79RYCkfb46AtNcsF/pyhi', CURRENT_TIMESTAMP, 'horst',         'Horst'),              -- 8
-    ('lalo@gusteaus.fr',     '+33100000009', '$2a$12$lhXVFbiWoa3crS6iEMTAcuEHOzppwGHk79RYCkfb46AtNcsF/pyhi', CURRENT_TIMESTAMP, 'lalo',          'Lalo'),               -- 9
-    ('larousse@gusteaus.fr', '+33100000010', '$2a$12$lhXVFbiWoa3crS6iEMTAcuEHOzppwGHk79RYCkfb46AtNcsF/pyhi', CURRENT_TIMESTAMP, 'larousse',      'Larousse'),           -- 10
-    ('mustafa@gusteaus.fr',  '+33100000011', '$2a$12$lhXVFbiWoa3crS6iEMTAcuEHOzppwGHk79RYCkfb46AtNcsF/pyhi', CURRENT_TIMESTAMP, 'mustafa',       'Mustafa'),            -- 11
-    ('django@colony.fr',     '+33100000012', '$2a$12$lhXVFbiWoa3crS6iEMTAcuEHOzppwGHk79RYCkfb46AtNcsF/pyhi', CURRENT_TIMESTAMP, 'django',        'Django'),             -- 12
-    ('emile@colony.fr',      '+33100000013', '$2a$12$lhXVFbiWoa3crS6iEMTAcuEHOzppwGHk79RYCkfb46AtNcsF/pyhi', CURRENT_TIMESTAMP, 'emile',         'Emile');              -- 13
+    ('remy@gusteaus.fr',     '+33100000002', '${userPassword}', CURRENT_TIMESTAMP, 'remy',          'Remy'),               -- 2
+    ('linguini@gusteaus.fr', '+33100000003', '${userPassword}', CURRENT_TIMESTAMP, 'linguini',      'Alfredo Linguini'),   -- 3
+    ('colette@gusteaus.fr',  '+33100000004', '${userPassword}', CURRENT_TIMESTAMP, 'colette',       'Colette Tatou'),      -- 4
+    ('gusteau@gusteaus.fr',  '+33100000005', '${userPassword}', CURRENT_TIMESTAMP, 'gusteau',       'Auguste Gusteau'),    -- 5
+    ('skinner@gusteaus.fr',  '+33100000006', '${userPassword}', CURRENT_TIMESTAMP, 'skinner',       'Skinner'),            -- 6
+    ('ego@latourdargent.fr', '+33100000007', '${userPassword}', CURRENT_TIMESTAMP, 'anton_ego',     'Anton Ego'),          -- 7
+    ('horst@gusteaus.fr',    '+33100000008', '${userPassword}', CURRENT_TIMESTAMP, 'horst',         'Horst'),              -- 8
+    ('lalo@gusteaus.fr',     '+33100000009', '${userPassword}', CURRENT_TIMESTAMP, 'lalo',          'Lalo'),               -- 9
+    ('larousse@gusteaus.fr', '+33100000010', '${userPassword}', CURRENT_TIMESTAMP, 'larousse',      'Larousse'),           -- 10
+    ('mustafa@gusteaus.fr',  '+33100000011', '${userPassword}', CURRENT_TIMESTAMP, 'mustafa',       'Mustafa'),            -- 11
+    ('django@colony.fr',     '+33100000012', '${userPassword}', CURRENT_TIMESTAMP, 'django',        'Django'),             -- 12
+    ('emile@colony.fr',      '+33100000013', '${userPassword}', CURRENT_TIMESTAMP, 'emile',         'Emile');              -- 13
 
 INSERT INTO users_roles (user_id, role_id) VALUES
     (2,  3),        -- Remy – chef
