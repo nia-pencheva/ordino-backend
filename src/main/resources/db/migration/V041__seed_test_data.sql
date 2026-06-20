@@ -668,4 +668,20 @@ INSERT INTO suppliers_products (supplier_id, warehouse_product_id, price, min_or
   (3, 7, 12.00, 6.000),  -- White wine (via warehouse_products id 7)
   (3, 8, 14.50, 6.000);  -- Red wine (via warehouse_products id 8)
 
+-- -------------------------------------------------------------
+-- loss_reasons
+-- -------------------------------------------------------------
+  INSERT IGNORE INTO loss_reasons (reason) VALUES
+('Expired / Spoiled Ingredient'),
+('Kitchen Prep Error / Burnt'),
+('Dropped / Spilled'),
+('Customer Order Send-Back'),
+('Incorrect Order Entry'),
+('Manager Comp / Promotion'),
+('Staff Meal'),
+('Supplier Shortage / Short-Shipped'),
+('Theft / Unaccounted Variance'),
+('Equipment Failure (e.g., Fridge Breakdown)'),
+('Quality Control / Subpar Taste');
+
 SET FOREIGN_KEY_CHECKS = 1;

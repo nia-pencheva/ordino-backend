@@ -65,7 +65,8 @@ public class SecurityConfiguration {
                         .requestMatchers(
                             "/warehouse-products", "/warehouse-products/**",
                             "/suppliers", "/suppliers/**",
-                            "/orders", "/orders/**"
+                            "/orders", "/orders/**",
+                            "/loss-reasons", "/loss-reasons/**"
                         ).hasAuthority("warehouse manager")
                         .anyRequest().authenticated()
                     )
