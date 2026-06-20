@@ -49,7 +49,7 @@ public class SecurityConfiguration {
                     )
                     .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/refresh", "/logout", "/error").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users", "/users/roles").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users", "/users/roles", "/users/{id}").permitAll()
                         .requestMatchers("/users", "/users/**").hasAuthority("admin")
                         .requestMatchers(
                             "/products", "/products/**",
@@ -62,7 +62,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/warehouse-product-categories", "/warehouse-product-categories/**").hasAuthority("warehouse manager")
                         .requestMatchers("/recipes/log", "/recipes/log/**").hasAnyAuthority("kitchen staff", "line cook", "chef", "manager")
                         .requestMatchers("/recipes", "/recipes/**").hasAnyAuthority("kitchen staff", "line cook", "chef", "manager")
-                        .requestMatchers("/warehouse-products", "/warehouse-products/**").hasAnyAuthority("warehouse manager")
+                        .requestMatchers("/warehouse-products", "/warehouse-products/**").hasAuthority("warehouse manager")
+                        .requestMatchers("/suppliers", "/suppliers/**").hasAuthority("warehouse manager")
                         .anyRequest().authenticated()
                     )
                     .sessionManagement(session ->
