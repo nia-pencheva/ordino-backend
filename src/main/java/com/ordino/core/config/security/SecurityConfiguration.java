@@ -62,8 +62,11 @@ public class SecurityConfiguration {
                         .requestMatchers("/warehouse-product-categories", "/warehouse-product-categories/**").hasAuthority("warehouse manager")
                         .requestMatchers("/recipes/log", "/recipes/log/**").hasAnyAuthority("kitchen staff", "line cook", "chef", "manager")
                         .requestMatchers("/recipes", "/recipes/**").hasAnyAuthority("kitchen staff", "line cook", "chef", "manager")
-                        .requestMatchers("/warehouse-products", "/warehouse-products/**").hasAuthority("warehouse manager")
-                        .requestMatchers("/suppliers", "/suppliers/**").hasAuthority("warehouse manager")
+                        .requestMatchers(
+                            "/warehouse-products", "/warehouse-products/**",
+                            "/suppliers", "/suppliers/**",
+                            "/orders", "/orders/**"
+                        ).hasAuthority("warehouse manager")
                         .anyRequest().authenticated()
                     )
                     .sessionManagement(session ->

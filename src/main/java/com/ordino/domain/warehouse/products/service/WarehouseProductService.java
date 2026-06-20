@@ -42,7 +42,7 @@ public class WarehouseProductService {
         PageRequest pageRequest = PageRequest.of(pageNumber, size);
 
         Page<WarehouseProduct> warehouseProductsPage = (name == null)
-                                                            ? repository.findAllFiltered(active, warehouseProductCategoryId, pageRequest)
+                                                            ? repository.findAllByActiveAndCategoryId(active, warehouseProductCategoryId, pageRequest)
                                                             : repository.searchByNameAndFilters(name, active, warehouseProductCategoryId, pageRequest);
 
         WarehouseProductsPageResponseDTO responseDTO = new WarehouseProductsPageResponseDTO();
