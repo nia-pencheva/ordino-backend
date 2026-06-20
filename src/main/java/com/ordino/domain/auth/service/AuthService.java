@@ -47,6 +47,7 @@ public class AuthService {
         User user = ((DatabaseUserDetails) authentication.getPrincipal()).getUser();
 
         LoginResponseUserDTO responseUserDTO = new LoginResponseUserDTO();
+        responseUserDTO.setId(user.getId());
         responseUserDTO.setUsername(user.getUsername());
         responseUserDTO.setName(user.getFullName());
         responseUserDTO.setRoles(

@@ -49,7 +49,7 @@ public class SecurityConfiguration {
                     )
                     .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/refresh", "/logout", "/error").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users", "/users/roles").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users", "/users/roles", "/users/{id}").permitAll()
                         .requestMatchers("/users", "/users/**").hasAuthority("admin")
                         .requestMatchers(
                             "/products", "/products/**",
