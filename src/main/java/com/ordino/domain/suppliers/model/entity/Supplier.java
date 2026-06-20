@@ -46,7 +46,7 @@ public class Supplier {
     @Column(name = "updated_at", nullable = false, columnDefinition = "TIMESTAMP")
     private Instant updatedAt;
 
-    @OneToMany(mappedBy = "supplier")
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SupplierProduct> supplierProducts;
 
     @OneToMany(mappedBy = "supplier")

@@ -15,6 +15,90 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
 
     @Query(
         value = """
+            WITH RECURSIVE category_tree AS (
+                SELECT id FROM warehouse_product_categories WHERE id = :categoryId
+                UNION ALL
+                SELECT wpc.id FROM warehouse_product_categories wpc
+                INNER JOIN category_tree ct ON wpc.parent_category_id = ct.id
+            )
+            SELECT wp.* FROM warehouse_products wp
+            WHERE wp.id NOT IN (
+                SELECT sp.warehouse_product_id FROM suppliers_products sp
+                WHERE sp.supplier_id = :supplierId
+            )
+            AND (:categoryId IS NULL OR wp.product_id IN (
+                SELECT pwc.product_id FROM products_warehouse_categories pwc
+                WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)
+            ))
+            ORDER BY wp.id
+        """,
+        countQuery = """
+            WITH RECURSIVE category_tree AS (
+                SELECT id FROM warehouse_product_categories WHERE id = :categoryId
+                UNION ALL
+                SELECT wpc.id FROM warehouse_product_categories wpc
+                INNER JOIN category_tree ct ON wpc.parent_category_id = ct.id
+            )
+            SELECT COUNT(*) FROM warehouse_products wp
+            WHERE wp.id NOT IN (
+                SELECT sp.warehouse_product_id FROM suppliers_products sp
+                WHERE sp.supplier_id = :supplierId
+            )
+            AND (:categoryId IS NULL OR wp.product_id IN (
+                SELECT pwc.product_id FROM products_warehouse_categories pwc
+                WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)
+            ))
+        """,
+        nativeQuery = true
+    )
+    Page<WarehouseProduct> findAddableBySupplierFiltered(@Param("supplierId") Long supplierId, @Param("categoryId") Long categoryId, Pageable pageable);
+
+    @Query(
+        value = """
+            WITH RECURSIVE category_tree AS (
+                SELECT id FROM warehouse_product_categories WHERE id = :categoryId
+                UNION ALL
+                SELECT wpc.id FROM warehouse_product_categories wpc
+                INNER JOIN category_tree ct ON wpc.parent_category_id = ct.id
+            )
+            SELECT * FROM (
+                SELECT wp.*, 1 AS rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
+                    WHERE LOWER(p.name) = LOWER(:name)
+                    AND wp.id NOT IN (SELECT sp.warehouse_product_id FROM suppliers_products sp WHERE sp.supplier_id = :supplierId)
+                    AND (:categoryId IS NULL OR wp.product_id IN (SELECT pwc.product_id FROM products_warehouse_categories pwc WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)))
+                UNION
+                SELECT wp.*, 2 AS rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
+                    WHERE LOWER(p.name) LIKE CONCAT(LOWER(:name), '%')
+                    AND wp.id NOT IN (SELECT sp.warehouse_product_id FROM suppliers_products sp WHERE sp.supplier_id = :supplierId)
+                    AND (:categoryId IS NULL OR wp.product_id IN (SELECT pwc.product_id FROM products_warehouse_categories pwc WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)))
+                UNION
+                SELECT wp.*, 3 AS rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
+                    WHERE LOWER(p.name) LIKE CONCAT('%', LOWER(:name), '%')
+                    AND wp.id NOT IN (SELECT sp.warehouse_product_id FROM suppliers_products sp WHERE sp.supplier_id = :supplierId)
+                    AND (:categoryId IS NULL OR wp.product_id IN (SELECT pwc.product_id FROM products_warehouse_categories pwc WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)))
+            ) t
+            GROUP BY id
+            ORDER BY rank, id
+        """,
+        countQuery = """
+            WITH RECURSIVE category_tree AS (
+                SELECT id FROM warehouse_product_categories WHERE id = :categoryId
+                UNION ALL
+                SELECT wpc.id FROM warehouse_product_categories wpc
+                INNER JOIN category_tree ct ON wpc.parent_category_id = ct.id
+            )
+            SELECT COUNT(*) FROM warehouse_products wp
+            JOIN products p ON p.id = wp.product_id
+            WHERE LOWER(p.name) LIKE CONCAT('%', LOWER(:name), '%')
+            AND wp.id NOT IN (SELECT sp.warehouse_product_id FROM suppliers_products sp WHERE sp.supplier_id = :supplierId)
+            AND (:categoryId IS NULL OR wp.product_id IN (SELECT pwc.product_id FROM products_warehouse_categories pwc WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)))
+        """,
+        nativeQuery = true
+    )
+    Page<WarehouseProduct> searchAddableBySupplierAndName(@Param("name") String name, @Param("supplierId") Long supplierId, @Param("categoryId") Long categoryId, Pageable pageable);
+
+    @Query(
+        value = """
             SELECT * FROM warehouse_products wp
             WHERE (:active IS NULL OR wp.active = :active)
             AND (:categoryId IS NULL OR wp.product_id IN (

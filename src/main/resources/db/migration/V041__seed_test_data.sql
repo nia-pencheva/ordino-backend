@@ -629,4 +629,43 @@ INSERT INTO recipe_categories (category) VALUES
 ('Beef & Pork'),
 ('Pasta & Noodles');
 
+-- -------------------------------------------------------------
+-- warehouse_products
+-- -------------------------------------------------------------
+INSERT INTO warehouse_products (id, product_id, unit_id, min_quantity, active) VALUES
+  (1, 1,   3,  10.000, TRUE),  -- Chicken fillet tracked in kg (Min inventory level before alert: 10kg)
+  (2, 2,   3,  15.000, TRUE),  -- Minced beef tracked in kg
+  (3, 5,   3,   5.000, TRUE),  -- Salmon tracked in kg
+  (4, 16,  3,  20.000, TRUE),  -- Tomatoes tracked in kg
+  (5, 21,  3,  15.000, TRUE),  -- Onions tracked in kg
+  (6, 22,  3,   2.000, TRUE),  -- Garlic tracked in kg
+  (7, 57, 12,  12.000, TRUE),  -- White wine tracked in bottles
+  (8, 58, 12,  12.000, TRUE);  -- Red wine tracked in bottles
+
+-- -------------------------------------------------------------
+-- suppliers
+-- -------------------------------------------------------------
+INSERT INTO suppliers (id, name, address, email, phone_number, active) VALUES
+  (1, 'Les Halles de Paris', 'Vibrant Market St, 75001 Paris, France', 'orders@leshalles.fr', '+3315550101', TRUE),
+  (2, 'Le Jardin de Rémy Wholesale', 'Countryside Fields, 77000 Melun, France', 'remy.garden@colony.fr', '+3315550102', TRUE),
+  (3, 'Bordeaux & Co. Distribution', 'Wine Avenue 42, 33000 Bordeaux, France', 'contact@bordeauxco.fr', '+3315550103', TRUE);
+
+-- -------------------------------------------------------------
+-- suppliers_products
+-- -------------------------------------------------------------
+INSERT INTO suppliers_products (supplier_id, warehouse_product_id, price, min_order_quantity) VALUES
+  -- Les Halles de Paris
+  (1, 1,  8.50,  5.000),  -- Chicken fillet (via warehouse_products id 1)
+  (1, 2,  9.20,  5.000),  -- Minced beef (via warehouse_products id 2)
+  (1, 3, 18.00,  2.000),  -- Salmon (fillet) (via warehouse_products id 3)
+  
+  -- Le Jardin de Rémy Wholesale
+  (2, 4, 2.10, 10.000),  -- Tomatoes (via warehouse_products id 4)
+  (2, 5, 1.05, 15.000),  -- Onions (via warehouse_products id 5)
+  (2, 6, 3.40,  2.000),  -- Garlic (via warehouse_products id 6)
+  
+  -- Bordeaux & Co. Distribution
+  (3, 7, 12.00, 6.000),  -- White wine (via warehouse_products id 7)
+  (3, 8, 14.50, 6.000);  -- Red wine (via warehouse_products id 8)
+
 SET FOREIGN_KEY_CHECKS = 1;
