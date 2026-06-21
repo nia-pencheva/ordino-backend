@@ -681,9 +681,6 @@ public class RecipeService {
             if (!"APPROVED".equals(recipe.getRecipeStatus().getStatus()))
                 throw new EntityNotFoundException("Recipe not found");
 
-            if (!recipe.getMenuSectionRecipes().isEmpty())
-                throw new com.ordino.core.exception.ValidationException("recipeId", "Recipe is currently in a menu");
-
             User currentUser = ((DatabaseUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
 
             recipe.setRecipeStatus(recipeStatusRepository.findByStatus("ARCHIVED")

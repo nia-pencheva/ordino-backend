@@ -1,8 +1,6 @@
 package com.ordino.domain.recipes.model.entity;
 
-import com.ordino.domain.menus.model.entity.MenuSectionRecipe;
 import com.ordino.domain.recipes.categories.model.entity.RecipeCategory;
-import com.ordino.domain.recipes.images.model.entity.RecipeImage;
 import com.ordino.domain.recipes.logs.archive.model.entity.RecipeArchiveLog;
 import com.ordino.domain.recipes.logs.edits.model.entity.RecipeEditLog;
 import com.ordino.domain.recipes.logs.review.model.entity.RecipeReviewLog;
@@ -21,8 +19,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = {"recipeStatus", "createdBy", "recipeCategories", "images", "reviewLogs",
-        "editLogs", "archiveLogs", "recipeProducts", "menuSectionRecipes"})
+@ToString(exclude = {"recipeStatus", "createdBy", "recipeCategories", "reviewLogs",
+        "editLogs", "archiveLogs", "recipeProducts"})
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Recipe {
 
@@ -78,9 +76,6 @@ public class Recipe {
     private List<RecipeCategory> recipeCategories = new ArrayList<>();
 
     @OneToMany(mappedBy = "recipe")
-    private List<RecipeImage> images;
-
-    @OneToMany(mappedBy = "recipe")
     private List<RecipeReviewLog> reviewLogs;
 
     @OneToMany(mappedBy = "recipe")
@@ -91,7 +86,4 @@ public class Recipe {
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeProduct> recipeProducts = new ArrayList<>();
-
-    @OneToMany(mappedBy = "recipe")
-    private List<MenuSectionRecipe> menuSectionRecipes;
 }
