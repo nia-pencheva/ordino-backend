@@ -7,3 +7,5 @@ CREATE TABLE refresh_tokens (
     UNIQUE KEY uq_refresh_tokens_token (token),
     CONSTRAINT fk_refresh_tokens_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON ${dbName}.refresh_tokens TO '${appUser}'@'%';

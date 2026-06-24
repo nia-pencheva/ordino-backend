@@ -6,7 +6,7 @@ CREATE TABLE notification_types (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO notification_types (type) VALUES
-    ('BATCH_EXPIRED'),
+    ('BATCH_EXPIRING'),
     ('LOW_QUANTITY'),
     ('NEW_PRODUCT');
 
