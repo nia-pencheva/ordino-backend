@@ -1,5 +1,7 @@
 package com.ordino.domain.suppliers.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +13,8 @@ import com.ordino.domain.suppliers.model.entity.SupplierProduct;
 public interface SupplierProductRepository extends JpaRepository<SupplierProduct, Long> {
 
     boolean existsBySupplierIdAndWarehouseProductId(Long supplierId, Long warehouseProductId);
+
+    Optional<SupplierProduct> findBySupplierIdAndWarehouseProductId(Long supplierId, Long warehouseProductId);
 
     @Query(
         value = """

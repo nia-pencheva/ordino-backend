@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class SupplierProductResponseDTO {
     private Long id;
+    private Long warehouseProductId;
     private String productName;
     private String unitAbbreviation;
     private BigDecimal price;

@@ -117,7 +117,7 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
         """,
         nativeQuery = true
     )
-    Page<WarehouseProduct> findAllFiltered(@Param("active") Boolean active, @Param("categoryId") Long categoryId, Pageable pageable);
+    Page<WarehouseProduct> findAllByActiveAndCategoryId(@Param("active") Boolean active, @Param("categoryId") Long categoryId, Pageable pageable);
 
     @Query(
         value = """

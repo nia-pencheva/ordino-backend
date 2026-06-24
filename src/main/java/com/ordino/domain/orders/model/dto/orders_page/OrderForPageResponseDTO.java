@@ -1,4 +1,4 @@
-package com.ordino.domain.orders.model.dto;
+package com.ordino.domain.orders.model.dto.orders_page;
 
 import java.time.Instant;
 

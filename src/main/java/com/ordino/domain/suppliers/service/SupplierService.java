@@ -19,13 +19,14 @@ import com.ordino.domain.suppliers.model.dto.addable_products_page.SuppliersAdda
 import com.ordino.domain.suppliers.model.dto.products.AddSupplierProductRequestDTO;
 import com.ordino.domain.suppliers.model.dto.products.SaveSupplierProductRequestDTO;
 import com.ordino.domain.suppliers.model.dto.save.SaveSupplierRequestDTO;
+import com.ordino.domain.suppliers.model.dto.supplier_orders.SupplierOrderForPageResponseDTO;
 import com.ordino.domain.suppliers.model.dto.supplier_orders.SupplierOrdersPageResponseDTO;
 import com.ordino.domain.suppliers.model.dto.supplier_products_page.SupplierProductsPageResponseDTO;
 import com.ordino.domain.suppliers.model.dto.suppliers_page.SupplierForPageResponseDTO;
 import com.ordino.domain.suppliers.model.dto.suppliers_page.SuppliersPageResponseDTO;
 import com.ordino.domain.suppliers.model.entity.Supplier;
 import com.ordino.domain.suppliers.model.entity.SupplierProduct;
-import com.ordino.domain.orders.model.dto.OrderForPageResponseDTO;
+import com.ordino.domain.orders.model.dto.orders_page.OrderForPageResponseDTO;
 import com.ordino.domain.orders.model.entity.Order;
 import com.ordino.domain.orders.repository.OrderRepository;
 import com.ordino.domain.orders.repository.OrderStatusRepository;
@@ -56,7 +57,7 @@ public class SupplierService {
         Page<Supplier> suppliersPage;
 
         if (search == null || search.isBlank()) {
-            suppliersPage = supplierRepository.findAllFiltered(active, pageRequest);
+            suppliersPage = supplierRepository.findAllByActive(active, pageRequest);
         } else {
             suppliersPage = switch (criteria) {
                 case "name" -> supplierRepository.searchByName(search, active, pageRequest);
@@ -123,8 +124,10 @@ public class SupplierService {
             throw new EntityNotFoundException("Supplier product not found");
         }
 
-        orderStatusRepository.findByStatus(orderStatus)
-                .orElseThrow(() -> new EntityNotFoundException("Order status not found"));
+        if (orderStatus != null) {
+            orderStatusRepository.findByStatus(orderStatus)
+                    .orElseThrow(() -> new EntityNotFoundException("Order status not found"));
+        }
 
         Integer pageNumber = page != null ? page - 1 : 0;
         Integer size = pageSize != null ? pageSize : this.pageSize;
@@ -135,15 +138,15 @@ public class SupplierService {
 
         Long warehouseProductId = supplierProduct.getWarehouseProduct().getId();
         Page<Order> ordersPage = "receivedAt".equals(timeField)
-            ? orderRepository.findBySupplierIdAndWarehouseProductIdFilteredByReceivedAt(supplierId, warehouseProductId, fromInstant, toInstant, orderStatus, pageRequest)
-            : orderRepository.findBySupplierIdAndWarehouseProductIdFiltered(supplierId, warehouseProductId, fromInstant, toInstant, orderStatus, pageRequest);
+            ? orderRepository.findBySupplierIdAndWarehouseProductIdAndReceivedAtBetweenAndOrderStatus(supplierId, warehouseProductId, fromInstant, toInstant, orderStatus, pageRequest)
+            : orderRepository.findBySupplierIdAndWarehouseProductIdAndCreatedAtBetweenAndOrderStatus(supplierId, warehouseProductId, fromInstant, toInstant, orderStatus, pageRequest);
 
         SupplierOrdersPageResponseDTO responseDTO = new SupplierOrdersPageResponseDTO();
 
         responseDTO.setOrders(
             ordersPage.stream()
                       .map(order -> {
-                          OrderForPageResponseDTO dto = new OrderForPageResponseDTO();
+                          SupplierOrderForPageResponseDTO dto = new SupplierOrderForPageResponseDTO();
                           dto.setId(order.getId());
                           dto.setCreatedAt(order.getCreatedAt());
                           return dto;
@@ -176,7 +179,9 @@ public class SupplierService {
                             SupplierProductResponseDTO dto = new SupplierProductResponseDTO();
 
                             dto.setId(product.getId());
+                            dto.setWarehouseProductId(product.getWarehouseProduct().getId());
                             dto.setProductName(product.getWarehouseProduct().getProduct().getName());
+                            dto.setUnitAbbreviation(product.getWarehouseProduct().getUnit().getAbbreviation());
                             dto.setPrice(product.getPrice());
                             dto.setMinOrderQuantity(product.getMinOrderQuantity());
 
@@ -206,15 +211,15 @@ public class SupplierService {
         Instant toInstant = to != null ? Instant.parse(to) : null;
 
         Page<Order> ordersPage = "receivedAt".equals(timeField)
-            ? orderRepository.findBySupplierIdFilteredByReceivedAt(id, fromInstant, toInstant, orderStatus, pageRequest)
-            : orderRepository.findBySupplierIdFiltered(id, fromInstant, toInstant, orderStatus, pageRequest);
+            ? orderRepository.findBySupplierIdAndReceivedAtBetweenAndOrderStatus(id, fromInstant, toInstant, orderStatus, pageRequest)
+            : orderRepository.findBySupplierIdAndCreatedAtBetweenAndOrderStatus(id, fromInstant, toInstant, orderStatus, pageRequest);
 
         SupplierOrdersPageResponseDTO responseDTO = new SupplierOrdersPageResponseDTO();
 
         responseDTO.setOrders(
             ordersPage.stream()
                       .map(order -> {
-                          OrderForPageResponseDTO dto = new OrderForPageResponseDTO();
+                          SupplierOrderForPageResponseDTO dto = new SupplierOrderForPageResponseDTO();
                           dto.setId(order.getId());
                           dto.setCreatedAt(order.getCreatedAt());
                           return dto;
