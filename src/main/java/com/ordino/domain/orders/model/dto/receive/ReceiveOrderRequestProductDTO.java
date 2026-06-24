@@ -1,10 +1,10 @@
 package com.ordino.domain.orders.model.dto.receive;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDate;
 
 import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
@@ -22,6 +22,6 @@ public class ReceiveOrderRequestProductDTO {
     private BigDecimal receivedQuantity;
 
     @NotNull(message = "Expiry date is required")
-    @Future(message = "Expiry date must be in the future")
-    private Instant expiryDate;
+    @FutureOrPresent(message = "Expiry date must not be in the past")
+    private LocalDate expiryDate;
 }

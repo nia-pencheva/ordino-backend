@@ -66,6 +66,7 @@ public class SecurityConfiguration {
                             "/warehouse-products", "/warehouse-products/**",
                             "/suppliers", "/suppliers/**",
                             "/orders", "/orders/**",
+                            "/warehouse-batches", "/warehouse-batches/**",
                             "/loss-reasons", "/loss-reasons/**"
                         ).hasAuthority("warehouse manager")
                         .anyRequest().authenticated()

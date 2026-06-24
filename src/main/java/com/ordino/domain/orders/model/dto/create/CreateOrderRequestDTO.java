@@ -8,7 +8,7 @@ import com.ordino.domain.orders.validation.NoDuplicateWarehouseProductIds;
 import com.ordino.domain.suppliers.validation.id.ExistingActiveSupplierId;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateOrderRequestDTO {
-    @NotNull(message = "Supplier ID is required")
+    @NotNull(message = "Supplier is required")
     @ExistingActiveSupplierId
     private Long supplierId;
 
@@ -27,7 +27,7 @@ public class CreateOrderRequestDTO {
     private List<CreateOrderRequestProductsDTO> products;
 
     @NotNull(message = "Expected delivery date is required")
-    @Future(message = "Expected delivery date must be in the future")
+    @FutureOrPresent(message = "Expected delivery date must be in the future")
     private Instant expectedDelivery;
 
     @NullOrNotBlank(message = "Notes must not be blank")

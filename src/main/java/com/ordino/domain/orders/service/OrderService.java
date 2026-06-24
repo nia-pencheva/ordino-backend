@@ -1,7 +1,6 @@
 package com.ordino.domain.orders.service;
 
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -37,9 +36,8 @@ import com.ordino.domain.users.model.entity.User;
 import com.ordino.domain.warehouse.products.model.entity.WarehouseProduct;
 import com.ordino.domain.warehouse.products.repository.WarehouseProductRepository;
 import com.ordino.domain.warehouse.warehouse_batches.logs.model.entity.WarehouseBatchEvent;
-import com.ordino.domain.warehouse.warehouse_batches.logs.model.entity.WarehouseBatchEventLog;
-import com.ordino.domain.warehouse.warehouse_batches.logs.repository.WarehouseBatchEventLogRepository;
 import com.ordino.domain.warehouse.warehouse_batches.logs.repository.WarehouseBatchEventRepository;
+import com.ordino.domain.warehouse.warehouse_batches.logs.service.WarehouseBatchEventLogService;
 import com.ordino.domain.warehouse.warehouse_batches.model.entity.WarehouseBatch;
 import com.ordino.domain.warehouse.warehouse_batches.repository.WarehouseBatchRepository;
 
@@ -58,8 +56,8 @@ public class OrderService {
     private final SupplierProductRepository supplierProductRepository;
     private final WarehouseProductRepository warehouseProductRepository;
     private final WarehouseBatchRepository warehouseBatchRepository;
-    private final WarehouseBatchEventLogRepository warehouseBatchEventLogRepository;
     private final WarehouseBatchEventRepository warehouseBatchEventRepository;
+    private final WarehouseBatchEventLogService logService;
 
     public OrdersPageResponseDTO getOrders(Integer page, Integer pageSize, String from, String to, String orderStatus, String timeField) {
         if (orderStatus != null) {
@@ -207,18 +205,12 @@ public class OrderService {
             batch.setWarehouseProduct(orderProduct.getWarehouseProduct());
             batch.setQuantity(productDTO.getReceivedQuantity());
             batch.setExpiryDate(productDTO.getExpiryDate() != null
-                    ? productDTO.getExpiryDate().atZone(ZoneOffset.UTC).toLocalDate()
+                    ? productDTO.getExpiryDate()
                     : null);
             batch.setOrder(order);
             WarehouseBatch savedBatch = warehouseBatchRepository.save(batch);
 
-            WarehouseBatchEventLog eventLog = new WarehouseBatchEventLog();
-            eventLog.setUser(currentUser);
-            eventLog.setWarehouseBatch(savedBatch);
-            eventLog.setWarehouseBatchEvent(receivedEvent);
-            eventLog.setQuantityDelta(productDTO.getReceivedQuantity());
-            eventLog.setNotes(dto.getNotes());
-            warehouseBatchEventLogRepository.save(eventLog);
+            logService.createLog(currentUser, savedBatch, receivedEvent, productDTO.getReceivedQuantity(), dto.getNotes());
         });
 
         order.setOrderStatus(receivedStatus);
