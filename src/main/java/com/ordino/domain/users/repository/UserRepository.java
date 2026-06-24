@@ -13,6 +13,9 @@ import com.ordino.domain.users.model.entity.Role;
 import com.ordino.domain.users.model.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+    @Query("SELECT DISTINCT u FROM User u JOIN FETCH u.roles r WHERE r.role = :roleName AND u.deletedAt IS NULL")
+    List<User> findByRoleName(@Param("roleName") String roleName);
+
     @Query("SELECT u FROM User u JOIN FETCH u.roles WHERE u.username = :username AND u.deletedAt IS NULL")
     Optional<User> findByUsername(String username);
 
