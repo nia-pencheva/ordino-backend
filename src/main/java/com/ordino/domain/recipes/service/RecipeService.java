@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ordino.core.config.mapping.CustomMapper;
 import com.ordino.core.config.security.DatabaseUserDetails;
+import com.ordino.domain.notifications.warehouse.WarehouseNotificationService;
 import com.ordino.domain.recipes.logs.archive.service.RecipeArchiveLogService;
 import com.ordino.domain.recipes.logs.edits.service.RecipeEditLogService;
 import com.ordino.domain.recipes.logs.review.model.entity.RecipeReviewLog;
@@ -78,6 +79,7 @@ public class RecipeService {
     private final RecipeEditLogService recipeEditLogService;
     private final RecipeArchiveLogService recipeArchiveLogService;
     private final Validator validator;
+    private final WarehouseNotificationService warehouseNotificationService;
 
     public RecipesPageResponseDTO getRecipes(String searchTitle, Integer page, Integer pageSize, String recipeStatus, Long recipeCategoryId) throws EntityNotFoundException {
         RecipeStatus status = recipeStatusRepository.findByStatus(recipeStatus)
@@ -526,6 +528,7 @@ public class RecipeService {
             recipeRepository.save(recipe);
 
             recipeReviewLogService.createLog(recipe, currentUser, "APPROVED");
+            warehouseNotificationService.sendNewProductsInRecipeNotification(recipe);
         } catch (JsonProcessingException e) {
             throw new ValidationException();
         }
@@ -546,10 +549,10 @@ public class RecipeService {
             recipeRepository.save(recipe);
 
             recipeReviewLogService.createLog(recipe, currentUser, "APPROVED");
+            warehouseNotificationService.sendNewProductsInRecipeNotification(recipe);
         } catch (JsonProcessingException e) {
             throw new ValidationException();
         }
-
     }
 
     private void validateForApproval(Recipe recipe) {
@@ -667,6 +670,7 @@ public class RecipeService {
             String newSnapshot = recipeLogService.createRecipeSnapshot(updatedRecipe);
 
             recipeEditLogService.createLog(oldSnapshot, newSnapshot, updatedRecipe, currentUser);
+            warehouseNotificationService.sendNewProductsInRecipeNotification(updatedRecipe);
         } catch (JsonProcessingException e) {
             throw new ValidationException();
         }
