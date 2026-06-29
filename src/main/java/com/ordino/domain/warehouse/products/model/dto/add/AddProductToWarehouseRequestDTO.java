@@ -2,6 +2,7 @@ package com.ordino.domain.warehouse.products.model.dto.add;
 
 import java.math.BigDecimal;
 
+import com.ordino.domain.products.validation.active.ActiveProductId;
 import com.ordino.domain.products.validation.id.ExistingProductId;
 import com.ordino.domain.units.validation.id.ExistingUnitId;
 import com.ordino.domain.warehouse.products.validation.product_id.UniqueWarehouseProductProductId;
@@ -17,6 +18,7 @@ import lombok.Setter;
 public class AddProductToWarehouseRequestDTO {
     @NotNull(message = "Product ID is required")
     @ExistingProductId
+    @ActiveProductId
     @UniqueWarehouseProductProductId
     private Long productId;
 

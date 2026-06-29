@@ -5,7 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ordino.domain.suppliers.model.dto.SupplierProductResponseDTO;
+import com.ordino.domain.suppliers.model.dto.SupplierProductInfoResponseDTO;
 import com.ordino.domain.suppliers.model.dto.SupplierResponseDTO;
 import com.ordino.domain.suppliers.model.dto.add.AddSupplierRequestDTO;
 import com.ordino.domain.suppliers.model.dto.addable_products_page.SuppliersAddableWarehouseProductsPageResponseDTO;
@@ -107,7 +107,7 @@ public class SuppliersController {
     }
 
     @GetMapping("/{supplierId}/products/{supplierProductId}")
-    public ResponseEntity<SupplierProductResponseDTO> getSupplierProduct(
+    public ResponseEntity<SupplierProductInfoResponseDTO> getSupplierProduct(
         @PathVariable @Positive Long supplierId,
         @PathVariable @Positive Long supplierProductId
     ) {

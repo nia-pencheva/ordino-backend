@@ -3,7 +3,7 @@ package com.ordino.domain.suppliers.model.dto.products;
 import java.math.BigDecimal;
 
 import com.ordino.domain.suppliers.validation.product_id.UniqueSupplierProductId;
-import com.ordino.domain.warehouse.products.validation.id.ExistingWarehouseProductId;
+import com.ordino.domain.warehouse.products.validation.id.ExistingActiveWarehouseProductId;
 
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 public class AddSupplierProductRequestDTO {
     @NotNull(message = "Warehouse product ID is required")
-    @ExistingWarehouseProductId
+    @ExistingActiveWarehouseProductId
     @UniqueSupplierProductId
     private Long warehouseProductId;
 

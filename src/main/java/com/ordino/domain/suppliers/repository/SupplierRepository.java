@@ -10,6 +10,8 @@ import com.ordino.domain.suppliers.model.entity.Supplier;
 
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
 
+    boolean existsByIdAndActive(Long id, Boolean active);
+
     boolean existsByName(String name);
     boolean existsByNameAndIdNot(String name, Long id);
 
@@ -21,7 +23,7 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
 
 
     @Query("SELECT s FROM Supplier s WHERE (:active IS NULL OR s.active = :active)")
-    Page<Supplier> findAllFiltered(@Param("active") Boolean active, Pageable pageable);
+    Page<Supplier> findAllByActive(@Param("active") Boolean active, Pageable pageable);
 
     @Query("SELECT s FROM Supplier s WHERE LOWER(s.name) LIKE LOWER(CONCAT('%', :search, '%')) AND (:active IS NULL OR s.active = :active)")
     Page<Supplier> searchByName(@Param("search") String search, @Param("active") Boolean active, Pageable pageable);

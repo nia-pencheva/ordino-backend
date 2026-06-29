@@ -10,6 +10,8 @@ import com.ordino.domain.products.model.entity.Product;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findByActive(Boolean active, Pageable pageable);
 
+    boolean existsByIdAndActiveTrue(Long id);
+
     @Query(
         value = """
             SELECT * FROM (

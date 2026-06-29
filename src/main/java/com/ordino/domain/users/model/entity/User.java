@@ -59,6 +59,9 @@ public class User {
     @Column(name = "deleted_at", nullable = true, columnDefinition = "TIMESTAMP")
     private Instant deletedAt;
 
+    @Column(name = "fcm_token", nullable = true, length = 255)
+    private String fcmToken;
+
     @ManyToMany
     @JoinTable(
         name = "users_roles",

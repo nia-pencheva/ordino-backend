@@ -43,5 +43,4 @@ public class AuthController {
         authService.changePassword(userDetails.getUser(), requestDTO);
         return ResponseEntity.noContent().build();
     }    
-    
 }
