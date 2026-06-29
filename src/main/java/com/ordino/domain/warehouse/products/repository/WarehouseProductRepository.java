@@ -13,6 +13,8 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
 
     boolean existsByProductId(Long productId);
 
+    boolean existsByIdAndActiveTrue(Long id);
+
     @Query(
         value = """
             WITH RECURSIVE category_tree AS (
@@ -26,6 +28,7 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
                 SELECT sp.warehouse_product_id FROM suppliers_products sp
                 WHERE sp.supplier_id = :supplierId
             )
+            AND wp.active = true
             AND (:categoryId IS NULL OR wp.product_id IN (
                 SELECT pwc.product_id FROM products_warehouse_categories pwc
                 WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)
@@ -44,6 +47,7 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
                 SELECT sp.warehouse_product_id FROM suppliers_products sp
                 WHERE sp.supplier_id = :supplierId
             )
+            AND wp.active = true
             AND (:categoryId IS NULL OR wp.product_id IN (
                 SELECT pwc.product_id FROM products_warehouse_categories pwc
                 WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)
@@ -65,16 +69,19 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
                 SELECT wp.*, 1 AS rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
                     WHERE LOWER(p.name) = LOWER(:name)
                     AND wp.id NOT IN (SELECT sp.warehouse_product_id FROM suppliers_products sp WHERE sp.supplier_id = :supplierId)
+                    AND wp.active = true
                     AND (:categoryId IS NULL OR wp.product_id IN (SELECT pwc.product_id FROM products_warehouse_categories pwc WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)))
                 UNION
                 SELECT wp.*, 2 AS rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
                     WHERE LOWER(p.name) LIKE CONCAT(LOWER(:name), '%')
                     AND wp.id NOT IN (SELECT sp.warehouse_product_id FROM suppliers_products sp WHERE sp.supplier_id = :supplierId)
+                    AND wp.active = true
                     AND (:categoryId IS NULL OR wp.product_id IN (SELECT pwc.product_id FROM products_warehouse_categories pwc WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)))
                 UNION
                 SELECT wp.*, 3 AS rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
                     WHERE LOWER(p.name) LIKE CONCAT('%', LOWER(:name), '%')
                     AND wp.id NOT IN (SELECT sp.warehouse_product_id FROM suppliers_products sp WHERE sp.supplier_id = :supplierId)
+                    AND wp.active = true
                     AND (:categoryId IS NULL OR wp.product_id IN (SELECT pwc.product_id FROM products_warehouse_categories pwc WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)))
             ) t
             GROUP BY id
@@ -91,6 +98,7 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
             JOIN products p ON p.id = wp.product_id
             WHERE LOWER(p.name) LIKE CONCAT('%', LOWER(:name), '%')
             AND wp.id NOT IN (SELECT sp.warehouse_product_id FROM suppliers_products sp WHERE sp.supplier_id = :supplierId)
+            AND wp.active = true
             AND (:categoryId IS NULL OR wp.product_id IN (SELECT pwc.product_id FROM products_warehouse_categories pwc WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)))
         """,
         nativeQuery = true
@@ -166,12 +174,14 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
     @Query(
         value = """
             SELECT * FROM products
-            WHERE id NOT IN (SELECT product_id FROM warehouse_products)
+            WHERE active = true
+            AND id NOT IN (SELECT product_id FROM warehouse_products)
             ORDER BY id
         """,
         countQuery = """
             SELECT COUNT(*) FROM products
-            WHERE id NOT IN (SELECT product_id FROM warehouse_products)
+            WHERE active = true
+            AND id NOT IN (SELECT product_id FROM warehouse_products)
         """,
         nativeQuery = true
     )
@@ -180,11 +190,11 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
     @Query(
         value = """
             SELECT * FROM (
-                SELECT *, 1 AS rank FROM products WHERE LOWER(name) = LOWER(:name)
+                SELECT *, 1 AS rank FROM products WHERE LOWER(name) = LOWER(:name) AND active = true
                 UNION
-                SELECT *, 2 AS rank FROM products WHERE LOWER(name) LIKE CONCAT(LOWER(:name), '%')
+                SELECT *, 2 AS rank FROM products WHERE LOWER(name) LIKE CONCAT(LOWER(:name), '%') AND active = true
                 UNION
-                SELECT *, 3 AS rank FROM products WHERE LOWER(name) LIKE CONCAT('%', LOWER(:name), '%')
+                SELECT *, 3 AS rank FROM products WHERE LOWER(name) LIKE CONCAT('%', LOWER(:name), '%') AND active = true
             ) t
             WHERE id NOT IN (SELECT product_id FROM warehouse_products)
             GROUP BY id
@@ -192,7 +202,8 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
         """,
         countQuery = """
             SELECT COUNT(*) FROM products
-            WHERE LOWER(name) LIKE CONCAT('%', LOWER(:name), '%')
+            WHERE active = true
+            AND LOWER(name) LIKE CONCAT('%', LOWER(:name), '%')
             AND id NOT IN (SELECT product_id FROM warehouse_products)
         """,
         nativeQuery = true

@@ -5,20 +5,20 @@ import com.ordino.domain.warehouse.products.repository.WarehouseProductRepositor
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ExistingWarehouseProductIdValidator implements ConstraintValidator<ExistingWarehouseProductId, Long> {
+@AllArgsConstructor
+public class ExistingActiveWarehouseProductIdValidator implements ConstraintValidator<ExistingActiveWarehouseProductId, Long> {
 
-    @Autowired
-    private WarehouseProductRepository repository;
+    private final WarehouseProductRepository repository;
 
     @Override
     public boolean isValid(Long id, ConstraintValidatorContext context) {
         if (id == null) {
             return true;
         }
-        return repository.existsById(id);
+        return repository.existsByIdAndActiveTrue(id);
     }
 }

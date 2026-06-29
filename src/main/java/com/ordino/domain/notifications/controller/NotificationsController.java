@@ -5,12 +5,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ordino.domain.notifications.model.dto.NotificationResponseDTO;
 import com.ordino.domain.notifications.model.dto.NotificationsPageResponseDTO;
+import com.ordino.domain.notifications.model.dto.RegisterDeviceRequestDTO;
 import com.ordino.domain.notifications.service.NotificationService;
 
 import jakarta.validation.constraints.Positive;
@@ -44,6 +46,17 @@ public class NotificationsController {
     @PostMapping("/{id}/mark-read")
     public ResponseEntity<Void> markAsRead(@PathVariable @Positive Long id) {
         notificationService.markAsRead(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/has-unread")
+    public ResponseEntity<Boolean> hasUnreadNotifications() {
+        return ResponseEntity.ok(notificationService.hasUnreadNotifications());
+    }
+
+    @PostMapping("/register-device")
+    public ResponseEntity<Void> registerFcmToken(@RequestBody RegisterDeviceRequestDTO dto) {
+        notificationService.registerFcmToken(dto.getToken());
         return ResponseEntity.noContent().build();
     }
 }

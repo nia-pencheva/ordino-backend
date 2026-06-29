@@ -2,7 +2,7 @@ package com.ordino.domain.orders.model.dto.create;
 
 import java.math.BigDecimal;
 
-import com.ordino.domain.warehouse.products.validation.id.ExistingWarehouseProductId;
+import com.ordino.domain.warehouse.products.validation.id.ExistingActiveWarehouseProductId;
 
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 public class CreateOrderRequestProductsDTO {
     @NotNull(message = "Warehouse product ID is required")
-    @ExistingWarehouseProductId
+    @ExistingActiveWarehouseProductId
     private Long warehouseProductId;
 
     @NotNull(message = "Expected quantity is required")

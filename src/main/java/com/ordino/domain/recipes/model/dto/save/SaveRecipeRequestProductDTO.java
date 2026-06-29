@@ -2,6 +2,7 @@ package com.ordino.domain.recipes.model.dto.save;
 
 import java.math.BigDecimal;
 
+import com.ordino.domain.products.validation.active.ActiveProductId;
 import com.ordino.domain.products.validation.id.ExistingProductId;
 import com.ordino.domain.units.validation.id.ExistingUnitId;
 
@@ -16,6 +17,7 @@ import lombok.Setter;
 @Setter
 public class SaveRecipeRequestProductDTO {
     @NotNull(message = "Product ID is required")
+    @ActiveProductId
     @ExistingProductId
     private Long productId;
 

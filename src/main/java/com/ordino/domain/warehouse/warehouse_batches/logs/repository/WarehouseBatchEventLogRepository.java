@@ -16,7 +16,7 @@ public interface WarehouseBatchEventLogRepository extends JpaRepository<Warehous
     @Query("""
         SELECT log FROM WarehouseBatchEventLog log
         JOIN log.warehouseBatch wb
-        WHERE (:warehouseProductId IS NULL OR wb.warehouseProduct.id = :warehouseProductId)
+        WHERE (:warehouseProductId IS NULL OR wb.warehouseProduct.product.id = :warehouseProductId)
         AND (:from IS NULL OR log.createdAt >= :from)
         AND (:to IS NULL OR log.createdAt <= :to)
         ORDER BY log.createdAt DESC
@@ -44,5 +44,19 @@ public interface WarehouseBatchEventLogRepository extends JpaRepository<Warehous
         @Param("from") Instant from,
         @Param("to") Instant to,
         Pageable pageable
+    );
+
+    @Query("""
+        SELECT log.lossReason.reason, COUNT(log)
+        FROM WarehouseBatchEventLog log
+        WHERE log.lossReason IS NOT NULL
+        AND (:from IS NULL OR log.createdAt >= :from)
+        AND (:to IS NULL OR log.createdAt <= :to)
+        GROUP BY log.lossReason.id, log.lossReason.reason
+        ORDER BY COUNT(log) DESC
+    """)
+    List<Object[]> findLossCountGroupedByReasonAndCreatedAtBetween(
+        @Param("from") Instant from,
+        @Param("to") Instant to
     );
 }

@@ -9,6 +9,7 @@ CREATE TABLE users (
     created_at          TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at          TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted_at          TIMESTAMP     NULL DEFAULT NULL,
+    fcm_token           VARCHAR(255)  NULL DEFAULT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_users_email (email),
     UNIQUE KEY uq_users_phone_number (phone_number),

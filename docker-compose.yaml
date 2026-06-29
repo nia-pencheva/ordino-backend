@@ -29,6 +29,22 @@ services:
         - action: rebuild
           path: ./pom.xml
 
+  frontend:
+    container_name: ordino_frontend
+    build:
+      context: ../ordino-frontend
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+    networks:
+      - ordino
+    develop:
+      watch:
+        - action: rebuild
+          path: ../ordino-frontend/src
+        - action: rebuild
+          path: ../ordino-frontend/package.json
+
   phpmyadmin:
     container_name: ordino_phpmyadmin
     image: phpmyadmin:latest

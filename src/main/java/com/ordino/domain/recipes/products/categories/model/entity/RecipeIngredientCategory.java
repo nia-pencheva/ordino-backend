@@ -5,6 +5,7 @@ import com.ordino.domain.products.model.entity.Product;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.Instant;
 import java.util.List;
@@ -48,5 +49,6 @@ public class RecipeIngredientCategory {
         joinColumns = @JoinColumn(name = "recipe_ingredient_category_id"),
         inverseJoinColumns = @JoinColumn(name = "product_id")
     )
+    @SQLRestriction("active = true")
     private List<Product> products;
 }

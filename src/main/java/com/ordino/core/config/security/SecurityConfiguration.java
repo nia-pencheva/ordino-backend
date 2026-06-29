@@ -42,7 +42,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JWTFilter jwtFilter, PasswordChangedFilter passwordChangedFilter) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable) // should enable
+        return http.csrf(AbstractHttpConfigurer::disable)
                     .logout(AbstractHttpConfigurer::disable)
                     .cors(cors -> cors
                         .configurationSource(this::getCorsConfiguration)
@@ -54,11 +54,13 @@ public class SecurityConfiguration {
                         .requestMatchers(
                             "/products", "/products/**",
                             "/unit-categories", "/unit-categories/**",
-                            "/units", "/units/**",
-                            "/recipe-ingredient-categories", "/recipe-ingredient-categories/**"
+                            "/units", "/units/**"
                         ).hasAnyAuthority("chef", "warehouse manager")
                         .requestMatchers(HttpMethod.GET, "/recipe-categories").hasAnyAuthority("kitchen staff", "line cook", "chef", "manager")
-                        .requestMatchers("/recipe-categories", "/recipe-categories/**").hasAuthority("chef")
+                        .requestMatchers(
+                            "/recipe-categories", "/recipe-categories/**",
+                            "/recipe-ingredient-categories", "/recipe-ingredient-categories/**"
+                        ).hasAuthority("chef")
                         .requestMatchers("/warehouse-product-categories", "/warehouse-product-categories/**").hasAuthority("warehouse manager")
                         .requestMatchers("/recipes/log", "/recipes/log/**").hasAnyAuthority("kitchen staff", "line cook", "chef", "manager")
                         .requestMatchers("/recipes", "/recipes/**").hasAnyAuthority("kitchen staff", "line cook", "chef", "manager")

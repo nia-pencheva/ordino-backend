@@ -640,7 +640,69 @@ INSERT INTO warehouse_products (id, product_id, unit_id, min_quantity, active) V
   (5, 21,  3,  15.000, TRUE),  -- Onions tracked in kg
   (6, 22,  3,   2.000, TRUE),  -- Garlic tracked in kg
   (7, 57, 12,  12.000, TRUE),  -- White wine tracked in bottles
-  (8, 58, 12,  12.000, TRUE);  -- Red wine tracked in bottles
+  (8, 58, 12,  12.000, TRUE),  -- Red wine tracked in bottles
+  -- Meat and poultry
+  (9,  3,  3,   8.000, TRUE),  -- Pork tenderloin (kg)
+  (10, 4,  3,  12.000, TRUE),  -- Chicken leg (kg)
+  -- Fish and seafood
+  (11, 6,  3,   5.000, TRUE),  -- Shrimp (kg)
+  -- Sausages and processed meat
+  (12, 7,  3,   5.000, TRUE),  -- Bacon (kg)
+  (13, 8,  3,   5.000, TRUE),  -- Ham (kg)
+  -- Eggs and dairy
+  (14, 9,  8, 120.000, TRUE),  -- Eggs (pcs)
+  (15, 10, 7,  20.000, TRUE),  -- Fresh milk (l)
+  (16, 11, 7,   5.000, TRUE),  -- Heavy cream 35% (l)
+  (17, 12, 3,   5.000, TRUE),  -- Butter (kg)
+  (18, 13, 3,   5.000, TRUE),  -- Kashkaval / Yellow cheese (kg)
+  (19, 15, 3,  10.000, TRUE),  -- Yogurt (kg)
+  -- Vegetables
+  (20, 17, 3,  10.000, TRUE),  -- Peppers (kg)
+  (21, 19, 3,  10.000, TRUE),  -- Carrots (kg)
+  (22, 20, 3,  25.000, TRUE),  -- Potatoes (kg)
+  (23, 23, 3,   5.000, TRUE),  -- Mushrooms (kg)
+  -- Fruits
+  (24, 24, 3,   5.000, TRUE),  -- Lemons (kg)
+  (25, 25, 3,  10.000, TRUE),  -- Apples (kg)
+  -- Nuts and seeds
+  (26, 27, 3,   3.000, TRUE),  -- Walnuts (kg)
+  -- Grains and starches
+  (27, 28, 3,  25.000, TRUE),  -- Flour type 500 (kg)
+  (28, 30, 3,  15.000, TRUE),  -- Rice (kg)
+  (29, 31, 3,  10.000, TRUE),  -- Spaghetti (kg)
+  (30, 33, 3,   3.000, TRUE),  -- Starch (kg)
+  -- Legumes
+  (31, 34, 3,  10.000, TRUE),  -- Lentils (kg)
+  (32, 35, 3,  10.000, TRUE),  -- Chickpeas (kg)
+  -- Oils and fats
+  (33, 36, 7,  10.000, TRUE),  -- Sunflower oil (l)
+  (34, 37, 7,   5.000, TRUE),  -- Olive oil (l)
+  -- Spices
+  (35, 38, 3,  10.000, TRUE),  -- Salt (kg)
+  (36, 39, 3,   1.000, TRUE),  -- Black pepper ground (kg)
+  (37, 40, 3,   1.000, TRUE),  -- Paprika (kg)
+  (38, 41, 3,   0.500, TRUE),  -- Cumin (kg)
+  (39, 42, 3,   0.500, TRUE),  -- Oregano (kg)
+  -- Fresh herbs
+  (40, 43, 9,   5.000, TRUE),  -- Fresh parsley (bch)
+  (41, 44, 9,   5.000, TRUE),  -- Fresh dill (bch)
+  -- Sauces, pastes and concentrates
+  (42, 45, 7,   5.000, TRUE),  -- Tomato puree (l)
+  (43, 46, 3,   3.000, TRUE),  -- Tomato paste (kg)
+  (44, 47, 7,  10.000, TRUE),  -- Chicken broth (l)
+  (45, 48, 7,  10.000, TRUE),  -- Beef broth (l)
+  (46, 49, 7,   3.000, TRUE),  -- Soy sauce (l)
+  -- Sugar and sweeteners
+  (47, 50, 3,  15.000, TRUE),  -- White sugar (kg)
+  (48, 52, 3,   3.000, TRUE),  -- Honey (kg)
+  -- Confectionery and dessert
+  (49, 53, 3,   3.000, TRUE),  -- Dark chocolate 70% (kg)
+  (50, 54, 3,   2.000, TRUE),  -- Cocoa powder (kg)
+  (51, 55, 3,   0.500, TRUE),  -- Gelatin (kg)
+  (52, 56, 12,  3.000, TRUE),  -- Vanilla extract (btl)
+  -- Canned food
+  (53, 59, 8,  24.000, TRUE),  -- Canned tomatoes (pcs)
+  (54, 60, 8,  12.000, TRUE);  -- Canned corn (pcs)
 
 -- -------------------------------------------------------------
 -- suppliers
@@ -653,20 +715,70 @@ INSERT INTO suppliers (id, name, address, email, phone_number, active) VALUES
 -- -------------------------------------------------------------
 -- suppliers_products
 -- -------------------------------------------------------------
-INSERT INTO suppliers_products (supplier_id, warehouse_product_id, price, min_order_quantity) VALUES
+INSERT INTO suppliers_products (id, supplier_id, warehouse_product_id, price, min_order_quantity) VALUES
   -- Les Halles de Paris
-  (1, 1,  8.50,  5.000),  -- Chicken fillet (via warehouse_products id 1)
-  (1, 2,  9.20,  5.000),  -- Minced beef (via warehouse_products id 2)
-  (1, 3, 18.00,  2.000),  -- Salmon (fillet) (via warehouse_products id 3)
-  
+  (1,  1, 1,  8.50,  5.000),  -- Chicken fillet (via warehouse_products id 1)
+  (2,  1, 2,  9.20,  5.000),  -- Minced beef (via warehouse_products id 2)
+  (3,  1, 3, 18.00,  2.000),  -- Salmon (fillet) (via warehouse_products id 3)
+
   -- Le Jardin de Rémy Wholesale
-  (2, 4, 2.10, 10.000),  -- Tomatoes (via warehouse_products id 4)
-  (2, 5, 1.05, 15.000),  -- Onions (via warehouse_products id 5)
-  (2, 6, 3.40,  2.000),  -- Garlic (via warehouse_products id 6)
-  
+  (4,  2, 4,  2.10, 10.000),  -- Tomatoes (via warehouse_products id 4)
+  (5,  2, 5,  1.05, 15.000),  -- Onions (via warehouse_products id 5)
+  (6,  2, 6,  3.40,  2.000),  -- Garlic (via warehouse_products id 6)
+
   -- Bordeaux & Co. Distribution
-  (3, 7, 12.00, 6.000),  -- White wine (via warehouse_products id 7)
-  (3, 8, 14.50, 6.000);  -- Red wine (via warehouse_products id 8)
+  (7,  3, 7, 12.00,  6.000),  -- White wine (via warehouse_products id 7)
+  (8,  3, 8, 14.50,  6.000),  -- Red wine (via warehouse_products id 8)
+
+  -- ---------------------------------------------------------------
+  -- Les Halles de Paris — fresh market (meats, dairy, produce, oils)
+  -- ---------------------------------------------------------------
+  (9,  1,  9,  12.50,  3.000),  -- Pork tenderloin (kg)
+  (10, 1, 10,   5.80,  5.000),  -- Chicken leg (kg)
+  (11, 1, 11,  22.00,  2.000),  -- Shrimp (kg)
+  (12, 1, 12,   9.80,  3.000),  -- Bacon (kg)
+  (13, 1, 13,  11.50,  3.000),  -- Ham (kg)
+  (14, 1, 14,   0.25, 30.000),  -- Eggs (pcs)
+  (15, 1, 15,   1.20,  5.000),  -- Fresh milk (l)
+  (16, 1, 16,   3.50,  2.000),  -- Heavy cream 35% (l)
+  (17, 1, 17,   8.50,  2.000),  -- Butter (kg)
+  (18, 1, 18,  14.00,  2.000),  -- Kashkaval / Yellow cheese (kg)
+  (19, 1, 20,   3.20,  5.000),  -- Peppers (kg)
+  (20, 1, 21,   1.20,  5.000),  -- Carrots (kg)
+  (21, 1, 23,   6.50,  3.000),  -- Mushrooms (kg)
+  (22, 1, 24,   2.80,  5.000),  -- Lemons (kg)
+  (23, 1, 25,   2.10,  5.000),  -- Apples (kg)
+  (24, 1, 34,   8.50,  3.000),  -- Olive oil (l)
+  (25, 1, 53,   1.80, 12.000),  -- Canned tomatoes (pcs)
+
+  -- ---------------------------------------------------------------
+  -- Le Jardin de Rémy Wholesale — farm produce, dairy, herbs
+  -- ---------------------------------------------------------------
+  (26, 2, 14,   0.20, 60.000),  -- Eggs (pcs) — farm price
+  (27, 2, 15,   0.95, 10.000),  -- Fresh milk (l)
+  (28, 2, 17,   7.80,  3.000),  -- Butter (kg)
+  (29, 2, 19,   2.50,  5.000),  -- Yogurt (kg)
+  (30, 2, 20,   2.80,  5.000),  -- Peppers (kg)
+  (31, 2, 21,   0.90, 10.000),  -- Carrots (kg)
+  (32, 2, 22,   0.65, 20.000),  -- Potatoes (kg)
+  (33, 2, 23,   5.80,  3.000),  -- Mushrooms (kg)
+  (34, 2, 26,  12.00,  2.000),  -- Walnuts (kg)
+  (35, 2, 40,   1.50,  5.000),  -- Fresh parsley (bch)
+  (36, 2, 41,   1.50,  5.000),  -- Fresh dill (bch)
+  (37, 2, 48,   9.50,  2.000),  -- Honey (kg)
+
+  -- ---------------------------------------------------------------
+  -- Bordeaux & Co. Distribution — specialty/gourmet dry & pantry
+  -- ---------------------------------------------------------------
+  (38, 3, 26,  13.50,  2.000),  -- Walnuts (kg)
+  (39, 3, 34,   9.20,  3.000),  -- Olive oil (l)
+  (40, 3, 46,   4.50,  2.000),  -- Soy sauce (l)
+  (41, 3, 48,  10.50,  2.000),  -- Honey (kg)
+  (42, 3, 49,  18.00,  1.000),  -- Dark chocolate 70% (kg)
+  (43, 3, 50,  12.00,  1.000),  -- Cocoa powder (kg)
+  (44, 3, 51,  28.00,  0.500),  -- Gelatin (kg)
+  (45, 3, 52,  15.00,  3.000),  -- Vanilla extract (btl)
+  (46, 3, 53,   1.65, 12.000);  -- Canned tomatoes (pcs)
 
 -- -------------------------------------------------------------
 -- loss_reasons
