@@ -1,6 +1,5 @@
 package com.ordino.core.validation.NullOrNotBlank;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -11,7 +10,6 @@ import jakarta.validation.Payload;
 
 @Target( {ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Documented
 @Constraint(validatedBy = NullOrNotBlankValidator.class)
 public @interface NullOrNotBlank {
     String message() default "{javax.validation.constraints.NullOrNotBlank.message}";

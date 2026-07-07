@@ -5,7 +5,6 @@ import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
-@Documented
 @Constraint(validatedBy = LeafWarehouseProductCategoryValidator.class)
 @Target({ElementType.PARAMETER, ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)

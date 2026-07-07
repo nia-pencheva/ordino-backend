@@ -5,7 +5,6 @@ import java.lang.annotation.*;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-@Documented
 @Constraint(validatedBy = NoDuplicateProductIdsValidator.class)
 @Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)

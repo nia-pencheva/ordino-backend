@@ -8,7 +8,6 @@ import java.lang.annotation.*;
 
 import com.ordino.core.validation.NullOrNotBlank.NullOrNotBlank;
 
-@Documented
 @Constraint(validatedBy = {})
 @Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)

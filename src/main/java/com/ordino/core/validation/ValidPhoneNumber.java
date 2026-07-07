@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Pattern;
 
 import java.lang.annotation.*;
 
-@Documented
 @Constraint(validatedBy = {})
 @Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)

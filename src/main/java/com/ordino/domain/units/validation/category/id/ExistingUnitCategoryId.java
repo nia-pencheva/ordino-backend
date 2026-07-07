@@ -5,7 +5,6 @@ import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
-@Documented
 @Constraint(validatedBy = ExistingUnitCategoryIdValidator.class)
 @Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)

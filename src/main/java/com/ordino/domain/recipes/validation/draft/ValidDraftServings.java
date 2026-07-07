@@ -7,7 +7,6 @@ import jakarta.validation.Payload;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
-@Documented
 @Constraint(validatedBy = {})
 @Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
