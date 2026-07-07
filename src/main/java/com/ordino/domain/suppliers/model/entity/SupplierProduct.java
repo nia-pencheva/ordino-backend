@@ -31,10 +31,10 @@ public class SupplierProduct {
     @JoinColumn(name = "warehouse_product_id", nullable = false)
     private WarehouseProduct warehouseProduct;
 
-    @Column(nullable = false, columnDefinition = "DECIMAL(10, 2) UNSIGNED")
+    @Column(nullable = false, columnDefinition = "DECIMAL(10, 2)")
     private BigDecimal price;
 
-    @Column(name = "min_order_quantity", nullable = false, columnDefinition = "DECIMAL(10, 3) UNSIGNED")
+    @Column(name = "min_order_quantity", nullable = false, columnDefinition = "DECIMAL(10, 3)")
     private BigDecimal minOrderQuantity;
 
     @CreationTimestamp

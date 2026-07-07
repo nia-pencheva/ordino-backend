@@ -33,7 +33,7 @@ public class RecipeProduct {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Column(nullable = false, columnDefinition = "DECIMAL(10, 3) UNSIGNED")
+    @Column(nullable = false, columnDefinition = "DECIMAL(10, 3)")
     private BigDecimal quantity;
 
     @ManyToOne
