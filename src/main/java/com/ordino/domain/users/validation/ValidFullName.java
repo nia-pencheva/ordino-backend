@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Size;
 
 import java.lang.annotation.*;
 
-@Documented
 @Constraint(validatedBy = {})
 @Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)

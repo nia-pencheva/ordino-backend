@@ -52,12 +52,12 @@ import com.ordino.domain.units.repository.UnitCategoryRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
 import java.util.List;
 import java.util.Map;
 
 import com.ordino.core.exception.ValidationErrorsException;
+import com.ordino.core.exception.ValidationException;
 import com.ordino.domain.recipes.model.dto.save.SaveRecipeRequestCategoryDTO;
 import com.ordino.domain.recipes.model.dto.save.SaveRecipeRequestProductDTO;
 import lombok.AllArgsConstructor;
@@ -457,7 +457,7 @@ public class RecipeServiceImpl implements RecipeService {
 
             recipeReviewLogService.createLog(recipe, reviewer, "SUBMITTED_FOR_APPROVAL");
         } catch (JsonProcessingException e) {
-            throw new ValidationException();
+            throw new ValidationException("recipe", "An error occurred while processing the recipe data");
         }
         
     }
@@ -480,7 +480,7 @@ public class RecipeServiceImpl implements RecipeService {
 
             recipeReviewLogService.createLog(recipe, currentUser, "RETURNED_FOR_REVISION", dto.getReturnNotes());
         } catch (JsonProcessingException e) {
-            throw new ValidationException();
+            throw new ValidationException("recipe", "An error occurred while processing the recipe data");
         }
     }
 
@@ -497,7 +497,7 @@ public class RecipeServiceImpl implements RecipeService {
 
             recipeReviewLogService.createLog(recipe, currentUser, "DISCARDED");
         } catch (JsonProcessingException e) {
-            throw new ValidationException();
+            throw new ValidationException("recipe", "An error occurred while processing the recipe data");
         }
     }
 
@@ -527,7 +527,7 @@ public class RecipeServiceImpl implements RecipeService {
             recipeReviewLogService.createLog(recipe, currentUser, "APPROVED");
             warehouseNotificationService.sendNewProductsInRecipeNotification(recipe);
         } catch (JsonProcessingException e) {
-            throw new ValidationException();
+            throw new ValidationException("recipe", "An error occurred while processing the recipe data");
         }
     }
 
@@ -548,7 +548,7 @@ public class RecipeServiceImpl implements RecipeService {
             recipeReviewLogService.createLog(recipe, currentUser, "APPROVED");
             warehouseNotificationService.sendNewProductsInRecipeNotification(recipe);
         } catch (JsonProcessingException e) {
-            throw new ValidationException();
+            throw new ValidationException("recipe", "An error occurred while processing the recipe data");
         }
     }
 
@@ -669,7 +669,7 @@ public class RecipeServiceImpl implements RecipeService {
             recipeEditLogService.createLog(oldSnapshot, newSnapshot, updatedRecipe, currentUser);
             warehouseNotificationService.sendNewProductsInRecipeNotification(updatedRecipe);
         } catch (JsonProcessingException e) {
-            throw new ValidationException();
+            throw new ValidationException("recipe", "An error occurred while processing the recipe data");
         }
     }
 
@@ -691,7 +691,7 @@ public class RecipeServiceImpl implements RecipeService {
 
             recipeArchiveLogService.createLog(recipe, currentUser, "ARCHIVED");
         } catch (JsonProcessingException e) {
-            throw new ValidationException();
+            throw new ValidationException("recipe", "An error occurred while processing the recipe data");
         }
     }
 
@@ -705,7 +705,7 @@ public class RecipeServiceImpl implements RecipeService {
                 throw new EntityNotFoundException("Recipe not found");
 
             if (recipeRepository.existsByTitleAndActiveTrue(recipe.getTitle()))
-                throw new com.ordino.core.exception.ValidationException("title", "A recipe with this title is already approved");
+                throw new ValidationException("title", "A recipe with this title is already approved");
 
             User currentUser = ((DatabaseUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
 
@@ -716,7 +716,7 @@ public class RecipeServiceImpl implements RecipeService {
 
             recipeArchiveLogService.createLog(recipe, currentUser, "RETURNED_TO_APPROVED");
         } catch (JsonProcessingException e) {
-            throw new ValidationException();
+            throw new ValidationException("recipe", "An error occurred while processing the recipe data");
         }
     }
 }

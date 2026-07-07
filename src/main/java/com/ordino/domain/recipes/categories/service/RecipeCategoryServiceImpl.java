@@ -70,7 +70,7 @@ public class RecipeCategoryServiceImpl implements RecipeCategoryService {
     }
 
     @Transactional
-    public void deleteRecipeCategory(Long id) throws EntityNotFoundException, ForbiddenOperationException {
+    public void deleteRecipeCategory(Long id) throws EntityNotFoundException {
         RecipeCategory category = repository.findById(id)
                                             .orElseThrow(() -> new EntityNotFoundException("Recipe category not found"));
 

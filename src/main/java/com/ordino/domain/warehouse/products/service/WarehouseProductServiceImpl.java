@@ -7,8 +7,10 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ordino.core.config.mapping.CustomMapper;
+import com.ordino.core.exception.ForbiddenOperationException;
 import com.ordino.domain.products.model.entity.Product;
 import com.ordino.domain.products.repository.ProductRepository;
 import com.ordino.domain.units.model.entity.Unit;
@@ -139,9 +141,14 @@ public class WarehouseProductServiceImpl implements WarehouseProductService {
         repository.save(warehouseProduct);
     }
 
-    public void deactivateWarehouseProduct(Long id) {
+    @Transactional
+    public void deactivateWarehouseProduct(Long id) throws EntityNotFoundException, ForbiddenOperationException {
         WarehouseProduct warehouseProduct = repository.findById(id)
                                                         .orElseThrow(() -> new EntityNotFoundException("Warehouse product not found"));
+
+        List<String> deactivateForbiddenReasons = canBeDeactivated(warehouseProduct);
+        if (!deactivateForbiddenReasons.isEmpty())
+            throw new ForbiddenOperationException(deactivateForbiddenReasons);
 
         warehouseProduct.setActive(false);
         repository.save(warehouseProduct);

@@ -5,7 +5,6 @@ import java.lang.annotation.*;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-@Documented
 @Constraint(validatedBy = ExistingLossReasonIdValidator.class)
 @Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
