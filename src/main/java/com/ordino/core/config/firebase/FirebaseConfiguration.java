@@ -29,6 +29,7 @@ public class FirebaseConfiguration {
         if (FirebaseApp.getApps().isEmpty()) {
             FirebaseApp.initializeApp(FirebaseOptions.builder()
                 .setCredentials(credentials)
+                .setProjectId(firebaseProperties.projectId())
                 .build());
         }
     }
