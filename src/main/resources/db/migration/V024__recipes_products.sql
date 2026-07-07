@@ -3,7 +3,7 @@ CREATE TABLE recipes_products (
     recipe_id  INT UNSIGNED   NOT NULL,
     position   INT UNSIGNED   NOT NULL,
     product_id INT UNSIGNED   NOT NULL,
-    quantity   DECIMAL(10, 3) UNSIGNED NOT NULL,
+    quantity   DECIMAL(10, 3) NOT NULL,
     unit_id    INT UNSIGNED   NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_recipes_products_recipe_product (recipe_id, product_id),
