@@ -21,7 +21,7 @@ public interface RecipeIngredientCategoryRepository extends JpaRepository<Recipe
 
     boolean existsByParentCategoryId(Long parentCategoryId);
 
-    @Query("SELECT DISTINCT c FROM RecipeIngredientCategory c LEFT JOIN FETCH c.products p WHERE p.active = true")
+    @Query("SELECT DISTINCT c FROM RecipeIngredientCategory c LEFT JOIN FETCH c.products p WHERE p.active IS NULL OR p.active = true")
     List<RecipeIngredientCategory> findAllWithActiveProducts();
 
     @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM RecipeIngredientCategory c JOIN c.products p WHERE c.id = :id")

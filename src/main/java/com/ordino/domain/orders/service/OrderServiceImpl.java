@@ -184,6 +184,9 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found"));
 
+        if (!"PENDING".equals(order.getOrderStatus().getStatus()))
+            throw new EntityNotFoundException("Order not found");
+
         User currentUser = ((DatabaseUserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser();
 
@@ -219,12 +222,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public void cancelOrder(Long id) {
+        User currentUser = ((DatabaseUserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUser();
+
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found"));
+
+        if (!"PENDING".equals(order.getOrderStatus().getStatus()))
+            throw new EntityNotFoundException("Order not found");
 
         OrderStatus cancelledStatus = orderStatusRepository.findByStatus("CANCELLED")
                 .orElseThrow(() -> new EntityNotFoundException("Order status not found"));
 
+        order.setFinalizedBy(currentUser);
         order.setOrderStatus(cancelledStatus);
 
         orderRepository.save(order);
