@@ -1,7 +1,7 @@
 CREATE TABLE warehouse_batches (
     id                   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     warehouse_product_id INT UNSIGNED    NOT NULL,
-    quantity             DECIMAL(10, 3) UNSIGNED NOT NULL,
+    quantity             DECIMAL(10, 3) NOT NULL,
     expiry_date          DATE            NULL,
     order_id             BIGINT UNSIGNED NULL DEFAULT NULL,
     created_at           TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
