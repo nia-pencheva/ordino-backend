@@ -31,13 +31,13 @@ public class OrderProduct {
     @JoinColumn(name = "warehouse_product_id", nullable = false)
     private WarehouseProduct warehouseProduct;
 
-    @Column(nullable = false, columnDefinition = "DECIMAL(10, 2) UNSIGNED")
+    @Column(nullable = false, columnDefinition = "DECIMAL(10, 2)")
     private BigDecimal price;
 
-    @Column(name = "expected_quantity", nullable = false, columnDefinition = "DECIMAL(10, 3) UNSIGNED")
+    @Column(name = "expected_quantity", nullable = false, columnDefinition = "DECIMAL(10, 3)")
     private BigDecimal expectedQuantity;
 
-    @Column(name = "received_quantity", nullable = true, columnDefinition = "DECIMAL(10, 3) UNSIGNED")
+    @Column(name = "received_quantity", nullable = true, columnDefinition = "DECIMAL(10, 3)")
     private BigDecimal receivedQuantity;
 
     @CreationTimestamp

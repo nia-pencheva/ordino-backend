@@ -30,7 +30,7 @@ public class WarehouseBatch {
     @JoinColumn(name = "warehouse_product_id", nullable = false)
     private WarehouseProduct warehouseProduct;
 
-    @Column(nullable = false, columnDefinition = "DECIMAL(10, 3) UNSIGNED")
+    @Column(nullable = false, columnDefinition = "DECIMAL(10, 3)")
     private BigDecimal quantity;
 
     @Column(name = "expiry_date", nullable = true)

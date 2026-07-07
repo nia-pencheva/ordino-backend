@@ -36,7 +36,7 @@ public class WarehouseProduct {
     @JoinColumn(name = "unit_id", nullable = false)
     private Unit unit;
 
-    @Column(name = "min_quantity", nullable = false, columnDefinition = "DECIMAL(10, 3) UNSIGNED")
+    @Column(name = "min_quantity", nullable = false, columnDefinition = "DECIMAL(10, 3)")
     private BigDecimal minQuantity;
 
     @Column(nullable = false)
