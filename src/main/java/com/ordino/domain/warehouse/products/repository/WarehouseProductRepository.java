@@ -66,26 +66,26 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
                 INNER JOIN category_tree ct ON wpc.parent_category_id = ct.id
             )
             SELECT * FROM (
-                SELECT wp.*, 1 AS rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
+                SELECT wp.*, 1 AS search_rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
                     WHERE LOWER(p.name) = LOWER(:name)
                     AND wp.id NOT IN (SELECT sp.warehouse_product_id FROM suppliers_products sp WHERE sp.supplier_id = :supplierId)
                     AND wp.active = true
                     AND (:categoryId IS NULL OR wp.product_id IN (SELECT pwc.product_id FROM products_warehouse_categories pwc WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)))
                 UNION
-                SELECT wp.*, 2 AS rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
+                SELECT wp.*, 2 AS search_rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
                     WHERE LOWER(p.name) LIKE CONCAT(LOWER(:name), '%')
                     AND wp.id NOT IN (SELECT sp.warehouse_product_id FROM suppliers_products sp WHERE sp.supplier_id = :supplierId)
                     AND wp.active = true
                     AND (:categoryId IS NULL OR wp.product_id IN (SELECT pwc.product_id FROM products_warehouse_categories pwc WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)))
                 UNION
-                SELECT wp.*, 3 AS rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
+                SELECT wp.*, 3 AS search_rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
                     WHERE LOWER(p.name) LIKE CONCAT('%', LOWER(:name), '%')
                     AND wp.id NOT IN (SELECT sp.warehouse_product_id FROM suppliers_products sp WHERE sp.supplier_id = :supplierId)
                     AND wp.active = true
                     AND (:categoryId IS NULL OR wp.product_id IN (SELECT pwc.product_id FROM products_warehouse_categories pwc WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)))
             ) t
             GROUP BY id
-            ORDER BY rank, id
+            ORDER BY search_rank, id
         """,
         countQuery = """
             WITH RECURSIVE category_tree AS (
@@ -130,7 +130,7 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
     @Query(
         value = """
             SELECT * FROM (
-                SELECT wp.*, 1 AS rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
+                SELECT wp.*, 1 AS search_rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
                     WHERE LOWER(p.name) = LOWER(:name)
                     AND (:active IS NULL OR wp.active = :active)
                     AND (:categoryId IS NULL OR wp.product_id IN (
@@ -138,7 +138,7 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
                         WHERE warehouse_product_category_id = :categoryId
                     ))
                 UNION
-                SELECT wp.*, 2 AS rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
+                SELECT wp.*, 2 AS search_rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
                     WHERE LOWER(p.name) LIKE CONCAT(LOWER(:name), '%')
                     AND (:active IS NULL OR wp.active = :active)
                     AND (:categoryId IS NULL OR wp.product_id IN (
@@ -146,7 +146,7 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
                         WHERE warehouse_product_category_id = :categoryId
                     ))
                 UNION
-                SELECT wp.*, 3 AS rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
+                SELECT wp.*, 3 AS search_rank FROM warehouse_products wp JOIN products p ON p.id = wp.product_id
                     WHERE LOWER(p.name) LIKE CONCAT('%', LOWER(:name), '%')
                     AND (:active IS NULL OR wp.active = :active)
                     AND (:categoryId IS NULL OR wp.product_id IN (
@@ -155,7 +155,7 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
                     ))
             ) t
             GROUP BY id
-            ORDER BY rank, id
+            ORDER BY search_rank, id
         """,
         countQuery = """
             SELECT COUNT(*) FROM warehouse_products wp
@@ -190,15 +190,15 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
     @Query(
         value = """
             SELECT * FROM (
-                SELECT *, 1 AS rank FROM products WHERE LOWER(name) = LOWER(:name) AND active = true
+                SELECT *, 1 AS search_rank FROM products WHERE LOWER(name) = LOWER(:name) AND active = true
                 UNION
-                SELECT *, 2 AS rank FROM products WHERE LOWER(name) LIKE CONCAT(LOWER(:name), '%') AND active = true
+                SELECT *, 2 AS search_rank FROM products WHERE LOWER(name) LIKE CONCAT(LOWER(:name), '%') AND active = true
                 UNION
-                SELECT *, 3 AS rank FROM products WHERE LOWER(name) LIKE CONCAT('%', LOWER(:name), '%') AND active = true
+                SELECT *, 3 AS search_rank FROM products WHERE LOWER(name) LIKE CONCAT('%', LOWER(:name), '%') AND active = true
             ) t
             WHERE id NOT IN (SELECT product_id FROM warehouse_products)
             GROUP BY id
-            ORDER BY rank, id
+            ORDER BY search_rank, id
         """,
         countQuery = """
             SELECT COUNT(*) FROM products
@@ -235,7 +235,7 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
     @Query(
         value = """
             SELECT * FROM (
-                SELECT DISTINCT p.*, 1 AS rank FROM products p
+                SELECT DISTINCT p.*, 1 AS search_rank FROM products p
                     JOIN recipes_products rp ON rp.product_id = p.id
                     JOIN recipes r ON r.id = rp.recipe_id
                     JOIN recipe_statuses rs ON rs.id = r.recipe_status_id
@@ -243,7 +243,7 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
                     AND p.id NOT IN (SELECT product_id FROM warehouse_products)
                     AND LOWER(p.name) = LOWER(:name)
                 UNION
-                SELECT DISTINCT p.*, 2 AS rank FROM products p
+                SELECT DISTINCT p.*, 2 AS search_rank FROM products p
                     JOIN recipes_products rp ON rp.product_id = p.id
                     JOIN recipes r ON r.id = rp.recipe_id
                     JOIN recipe_statuses rs ON rs.id = r.recipe_status_id
@@ -251,7 +251,7 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
                     AND p.id NOT IN (SELECT product_id FROM warehouse_products)
                     AND LOWER(p.name) LIKE CONCAT(LOWER(:name), '%')
                 UNION
-                SELECT DISTINCT p.*, 3 AS rank FROM products p
+                SELECT DISTINCT p.*, 3 AS search_rank FROM products p
                     JOIN recipes_products rp ON rp.product_id = p.id
                     JOIN recipes r ON r.id = rp.recipe_id
                     JOIN recipe_statuses rs ON rs.id = r.recipe_status_id
@@ -260,7 +260,7 @@ public interface WarehouseProductRepository extends JpaRepository<WarehouseProdu
                     AND LOWER(p.name) LIKE CONCAT('%', LOWER(:name), '%')
             ) t
             GROUP BY id
-            ORDER BY rank, id
+            ORDER BY search_rank, id
         """,
         countQuery = """
             SELECT COUNT(DISTINCT p.id) FROM products p

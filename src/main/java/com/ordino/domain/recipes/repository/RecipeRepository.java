@@ -17,14 +17,14 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     @Query(
         value = """
             SELECT * FROM (
-                SELECT *, 1 AS rank FROM recipes WHERE LOWER(title) = LOWER(:title) AND recipe_status_id = :statusId
+                SELECT *, 1 AS search_rank FROM recipes WHERE LOWER(title) = LOWER(:title) AND recipe_status_id = :statusId
                 UNION
-                SELECT *, 2 AS rank FROM recipes WHERE LOWER(title) LIKE CONCAT(LOWER(:title), '%') AND recipe_status_id = :statusId
+                SELECT *, 2 AS search_rank FROM recipes WHERE LOWER(title) LIKE CONCAT(LOWER(:title), '%') AND recipe_status_id = :statusId
                 UNION
-                SELECT *, 3 AS rank FROM recipes WHERE LOWER(title) LIKE CONCAT('%', LOWER(:title), '%') AND recipe_status_id = :statusId
+                SELECT *, 3 AS search_rank FROM recipes WHERE LOWER(title) LIKE CONCAT('%', LOWER(:title), '%') AND recipe_status_id = :statusId
             ) t
             GROUP BY id
-            ORDER BY rank, title
+            ORDER BY search_rank, title
         """,
         countQuery = """
             SELECT COUNT(*) FROM recipes
@@ -38,14 +38,14 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     @Query(
         value = """
             SELECT * FROM (
-                SELECT *, 1 AS rank FROM recipes WHERE LOWER(title) = LOWER(:title) AND recipe_status_id = :statusId AND created_by = :createdById
+                SELECT *, 1 AS search_rank FROM recipes WHERE LOWER(title) = LOWER(:title) AND recipe_status_id = :statusId AND created_by = :createdById
                 UNION
-                SELECT *, 2 AS rank FROM recipes WHERE LOWER(title) LIKE CONCAT(LOWER(:title), '%') AND recipe_status_id = :statusId AND created_by = :createdById
+                SELECT *, 2 AS search_rank FROM recipes WHERE LOWER(title) LIKE CONCAT(LOWER(:title), '%') AND recipe_status_id = :statusId AND created_by = :createdById
                 UNION
-                SELECT *, 3 AS rank FROM recipes WHERE LOWER(title) LIKE CONCAT('%', LOWER(:title), '%') AND recipe_status_id = :statusId AND created_by = :createdById
+                SELECT *, 3 AS search_rank FROM recipes WHERE LOWER(title) LIKE CONCAT('%', LOWER(:title), '%') AND recipe_status_id = :statusId AND created_by = :createdById
             ) t
             GROUP BY id
-            ORDER BY rank, title
+            ORDER BY search_rank, title
         """,
         countQuery = """
             SELECT COUNT(*) FROM recipes
@@ -64,20 +64,20 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     @Query(
         value = """
             SELECT * FROM (
-                SELECT r.*, 1 AS rank FROM recipes r
+                SELECT r.*, 1 AS search_rank FROM recipes r
                     JOIN recipes_recipe_categories rrc ON rrc.recipe_id = r.id
                     WHERE LOWER(r.title) = LOWER(:title) AND r.recipe_status_id = :statusId AND rrc.recipe_category_id = :categoryId
                 UNION
-                SELECT r.*, 2 AS rank FROM recipes r
+                SELECT r.*, 2 AS search_rank FROM recipes r
                     JOIN recipes_recipe_categories rrc ON rrc.recipe_id = r.id
                     WHERE LOWER(r.title) LIKE CONCAT(LOWER(:title), '%') AND r.recipe_status_id = :statusId AND rrc.recipe_category_id = :categoryId
                 UNION
-                SELECT r.*, 3 AS rank FROM recipes r
+                SELECT r.*, 3 AS search_rank FROM recipes r
                     JOIN recipes_recipe_categories rrc ON rrc.recipe_id = r.id
                     WHERE LOWER(r.title) LIKE CONCAT('%', LOWER(:title), '%') AND r.recipe_status_id = :statusId AND rrc.recipe_category_id = :categoryId
             ) t
             GROUP BY id
-            ORDER BY rank, title
+            ORDER BY search_rank, title
         """,
         countQuery = """
             SELECT COUNT(*) FROM recipes r
@@ -93,20 +93,20 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     @Query(
         value = """
             SELECT * FROM (
-                SELECT r.*, 1 AS rank FROM recipes r
+                SELECT r.*, 1 AS search_rank FROM recipes r
                     JOIN recipes_recipe_categories rrc ON rrc.recipe_id = r.id
                     WHERE LOWER(r.title) = LOWER(:title) AND r.recipe_status_id = :statusId AND r.created_by = :createdById AND rrc.recipe_category_id = :categoryId
                 UNION
-                SELECT r.*, 2 AS rank FROM recipes r
+                SELECT r.*, 2 AS search_rank FROM recipes r
                     JOIN recipes_recipe_categories rrc ON rrc.recipe_id = r.id
                     WHERE LOWER(r.title) LIKE CONCAT(LOWER(:title), '%') AND r.recipe_status_id = :statusId AND r.created_by = :createdById AND rrc.recipe_category_id = :categoryId
                 UNION
-                SELECT r.*, 3 AS rank FROM recipes r
+                SELECT r.*, 3 AS search_rank FROM recipes r
                     JOIN recipes_recipe_categories rrc ON rrc.recipe_id = r.id
                     WHERE LOWER(r.title) LIKE CONCAT('%', LOWER(:title), '%') AND r.recipe_status_id = :statusId AND r.created_by = :createdById AND rrc.recipe_category_id = :categoryId
             ) t
             GROUP BY id
-            ORDER BY rank, title
+            ORDER BY search_rank, title
         """,
         countQuery = """
             SELECT COUNT(*) FROM recipes r
@@ -189,7 +189,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     @Query(
         value = """
             SELECT * FROM (
-                SELECT r.*, 1 AS rank FROM recipes r
+                SELECT r.*, 1 AS search_rank FROM recipes r
                     INNER JOIN recipe_review_logs rrl ON rrl.recipe_id = r.id
                     INNER JOIN (
                         SELECT rrl2.recipe_id, MAX(rrl2.id) AS max_id
@@ -200,7 +200,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
                     ) latest ON latest.recipe_id = r.id AND latest.max_id = rrl.id
                     WHERE LOWER(r.title) = LOWER(:title) AND r.recipe_status_id = :statusId AND rrl.reviewer_id = :reviewerId
                 UNION
-                SELECT r.*, 2 AS rank FROM recipes r
+                SELECT r.*, 2 AS search_rank FROM recipes r
                     INNER JOIN recipe_review_logs rrl ON rrl.recipe_id = r.id
                     INNER JOIN (
                         SELECT rrl2.recipe_id, MAX(rrl2.id) AS max_id
@@ -211,7 +211,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
                     ) latest ON latest.recipe_id = r.id AND latest.max_id = rrl.id
                     WHERE LOWER(r.title) LIKE CONCAT(LOWER(:title), '%') AND r.recipe_status_id = :statusId AND rrl.reviewer_id = :reviewerId
                 UNION
-                SELECT r.*, 3 AS rank FROM recipes r
+                SELECT r.*, 3 AS search_rank FROM recipes r
                     INNER JOIN recipe_review_logs rrl ON rrl.recipe_id = r.id
                     INNER JOIN (
                         SELECT rrl2.recipe_id, MAX(rrl2.id) AS max_id
@@ -223,7 +223,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
                     WHERE LOWER(r.title) LIKE CONCAT('%', LOWER(:title), '%') AND r.recipe_status_id = :statusId AND rrl.reviewer_id = :reviewerId
             ) t
             GROUP BY id
-            ORDER BY rank, title
+            ORDER BY search_rank, title
         """,
         countQuery = """
             SELECT COUNT(*) FROM recipes r
@@ -246,7 +246,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     @Query(
         value = """
             SELECT * FROM (
-                SELECT r.*, 1 AS rank FROM recipes r
+                SELECT r.*, 1 AS search_rank FROM recipes r
                     INNER JOIN recipe_review_logs rrl ON rrl.recipe_id = r.id
                     INNER JOIN (
                         SELECT rrl2.recipe_id, MAX(rrl2.id) AS max_id
@@ -258,7 +258,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
                     INNER JOIN recipes_recipe_categories rrc ON rrc.recipe_id = r.id
                     WHERE LOWER(r.title) = LOWER(:title) AND r.recipe_status_id = :statusId AND rrl.reviewer_id = :reviewerId AND rrc.recipe_category_id = :categoryId
                 UNION
-                SELECT r.*, 2 AS rank FROM recipes r
+                SELECT r.*, 2 AS search_rank FROM recipes r
                     INNER JOIN recipe_review_logs rrl ON rrl.recipe_id = r.id
                     INNER JOIN (
                         SELECT rrl2.recipe_id, MAX(rrl2.id) AS max_id
@@ -270,7 +270,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
                     INNER JOIN recipes_recipe_categories rrc ON rrc.recipe_id = r.id
                     WHERE LOWER(r.title) LIKE CONCAT(LOWER(:title), '%') AND r.recipe_status_id = :statusId AND rrl.reviewer_id = :reviewerId AND rrc.recipe_category_id = :categoryId
                 UNION
-                SELECT r.*, 3 AS rank FROM recipes r
+                SELECT r.*, 3 AS search_rank FROM recipes r
                     INNER JOIN recipe_review_logs rrl ON rrl.recipe_id = r.id
                     INNER JOIN (
                         SELECT rrl2.recipe_id, MAX(rrl2.id) AS max_id
@@ -283,7 +283,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
                     WHERE LOWER(r.title) LIKE CONCAT('%', LOWER(:title), '%') AND r.recipe_status_id = :statusId AND rrl.reviewer_id = :reviewerId AND rrc.recipe_category_id = :categoryId
             ) t
             GROUP BY id
-            ORDER BY rank, title
+            ORDER BY search_rank, title
         """,
         countQuery = """
             SELECT COUNT(*) FROM recipes r

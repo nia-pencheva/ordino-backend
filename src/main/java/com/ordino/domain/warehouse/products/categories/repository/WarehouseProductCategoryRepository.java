@@ -45,18 +45,18 @@ public interface WarehouseProductCategoryRepository extends JpaRepository<Wareho
     @Query(
         value = """
             SELECT * FROM (
-                SELECT *, 1 AS rank FROM products WHERE LOWER(name) = LOWER(:name)
+                SELECT *, 1 AS search_rank FROM products WHERE LOWER(name) = LOWER(:name)
                 UNION
-                SELECT *, 2 AS rank FROM products WHERE LOWER(name) LIKE CONCAT(LOWER(:name), '%')
+                SELECT *, 2 AS search_rank FROM products WHERE LOWER(name) LIKE CONCAT(LOWER(:name), '%')
                 UNION
-                SELECT *, 3 AS rank FROM products WHERE LOWER(name) LIKE CONCAT('%', LOWER(:name), '%')
+                SELECT *, 3 AS search_rank FROM products WHERE LOWER(name) LIKE CONCAT('%', LOWER(:name), '%')
             ) t
             WHERE id NOT IN (
                 SELECT product_id FROM products_warehouse_categories
                 WHERE warehouse_product_category_id = :categoryId
             )
             GROUP BY id
-            ORDER BY rank, id
+            ORDER BY search_rank, id
         """,
         countQuery = """
             SELECT COUNT(*) FROM products

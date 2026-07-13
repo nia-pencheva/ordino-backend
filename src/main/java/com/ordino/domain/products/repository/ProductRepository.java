@@ -15,14 +15,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(
         value = """
             SELECT * FROM (
-                SELECT *, 1 AS rank FROM products WHERE LOWER(name) = LOWER(:name) AND active = :active
+                SELECT *, 1 AS search_rank FROM products WHERE LOWER(name) = LOWER(:name) AND active = :active
                 UNION
-                SELECT *, 2 AS rank FROM products WHERE LOWER(name) LIKE CONCAT(LOWER(:name), '%') AND active = :active
+                SELECT *, 2 AS search_rank FROM products WHERE LOWER(name) LIKE CONCAT(LOWER(:name), '%') AND active = :active
                 UNION
-                SELECT *, 3 AS rank FROM products WHERE LOWER(name) LIKE CONCAT('%', LOWER(:name), '%') AND active = :active
+                SELECT *, 3 AS search_rank FROM products WHERE LOWER(name) LIKE CONCAT('%', LOWER(:name), '%') AND active = :active
             ) t
             GROUP BY id
-            ORDER BY rank, id
+            ORDER BY search_rank, id
         """,
         countQuery = "SELECT COUNT(*) FROM products WHERE name LIKE CONCAT('%', :name, '%')",
         nativeQuery = true
