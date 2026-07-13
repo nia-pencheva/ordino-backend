@@ -61,21 +61,21 @@ public interface SupplierProductRepository extends JpaRepository<SupplierProduct
                 INNER JOIN category_tree ct ON wpc.parent_category_id = ct.id
             )
             SELECT * FROM (
-                SELECT sp.*, 1 AS rank FROM suppliers_products sp
+                SELECT sp.*, 1 AS search_rank FROM suppliers_products sp
                 JOIN warehouse_products wp ON wp.id = sp.warehouse_product_id
                 JOIN products p ON p.id = wp.product_id
                     WHERE LOWER(p.name) = LOWER(:name)
                     AND (sp.supplier_id = :supplierId)
                     AND (:warehouseProductCategoryId IS NULL OR wp.product_id IN (SELECT pwc.product_id FROM products_warehouse_categories pwc WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)))
                 UNION
-                SELECT sp.*, 2 AS rank FROM suppliers_products sp
+                SELECT sp.*, 2 AS search_rank FROM suppliers_products sp
                 JOIN warehouse_products wp ON wp.id = sp.warehouse_product_id
                 JOIN products p ON p.id = wp.product_id
                     WHERE LOWER(p.name) LIKE CONCAT(LOWER(:name), '%')
                     AND (sp.supplier_id = :supplierId)
                     AND (:warehouseProductCategoryId IS NULL OR wp.product_id IN (SELECT pwc.product_id FROM products_warehouse_categories pwc WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)))
                 UNION
-                SELECT sp.*, 3 AS rank FROM suppliers_products sp
+                SELECT sp.*, 3 AS search_rank FROM suppliers_products sp
                 JOIN warehouse_products wp ON wp.id = sp.warehouse_product_id
                 JOIN products p ON p.id = wp.product_id
                     WHERE LOWER(p.name) LIKE CONCAT('%', LOWER(:name), '%')
@@ -83,7 +83,7 @@ public interface SupplierProductRepository extends JpaRepository<SupplierProduct
                     AND (:warehouseProductCategoryId IS NULL OR wp.product_id IN (SELECT pwc.product_id FROM products_warehouse_categories pwc WHERE pwc.warehouse_product_category_id IN (SELECT id FROM category_tree)))
             ) t
             GROUP BY id
-            ORDER BY rank, id
+            ORDER BY search_rank, id
         """,
         countQuery = """
             WITH RECURSIVE category_tree AS (
